@@ -74,33 +74,44 @@ module master_read #(
 	output logic [              31:0] read_data;      
 	output logic                      read_pause_cpu;
 	
-	logic        [               1:0] cs;
-	logic        [               1:0] ns;
-	
+	logic        [               2:0] cs;
+	logic        [               2:0] ns;
+	logic        [              31:0] read_data_register_out;
 	always_ff@(posedge clk or negedge rst)
 	begin
 		if (rst==1'b0)
 		begin
-			cs<=2'b00;
+			cs<=3'b000;
 		end
 		else
 		begin
 			cs<=ns;
 		end
 	end
+	always_ff@(posedge clk or negedge rst)
+	begin
+		if (rst==1'b0)
+		begin
+			read_data_register_out=32'd0;
+		end
+		else
+		begin
+			read_data_register_out=read_data;
+		end
+	end
 	always_comb
 	begin
 		case(cs)
-			2'b00:
+			3'b000:
 			begin
 				if(cpu_read_signal)
 				begin
-					ns=2'b01;
+					ns=3'b001;
 					read_pause_cpu=1'b1;
 				end
 				else
 				begin
-					ns=2'b00;
+					ns=3'b000;
 					read_pause_cpu=1'b0;
 				end
 				ARID_M   =default_slaveid;
@@ -109,15 +120,15 @@ module master_read #(
 				RREADY_M =1'b0;
 				read_data=32'd0;
 			end
-			2'b01:
+			3'b001:
 			begin
 				if(ARREADY_M==1'b1)
 				begin
-					ns=2'b10;
+					ns=3'b010;
 				end
 				else
 				begin
-					ns=2'b01;
+					ns=3'b001;
 				end
 				ARID_M   =slaveid;
 				ARADDR_M =address;
@@ -126,15 +137,15 @@ module master_read #(
 				read_pause_cpu=1'b1;
 				read_data=32'd0;
 			end
-			2'b10:
+			3'b010:
 			begin
 				if (RLAST_M==1'b1)
 				begin
-					ns=2'b00;
+					ns=3'b100;
 				end
 				else
 				begin
-					ns=2'b10;
+					ns=3'b010;
 				end
 				ARID_M   =slaveid;
 				ARADDR_M =address;
@@ -142,6 +153,17 @@ module master_read #(
 				RREADY_M =1'b1;
 				read_data= (RRESP_M==2'b00 && RVALID_M==1'b1)?RDATA_M:32'd0;
 				read_pause_cpu=1'b1;
+			end
+
+			3'b100:
+			begin
+				ARID_M   =slaveid;
+				ARADDR_M =address;
+				ARVALID_M=1'b0;
+				RREADY_M =1'b1;
+				read_data= read_data_register_out;
+				read_pause_cpu=1'b0;
+				ns=3'b000;				
 			end
 			default:
 			begin
@@ -151,7 +173,7 @@ module master_read #(
 				RREADY_M =1'b0;
 				read_pause_cpu=1'b0;
 				read_data=32'd0;
-				
+				ns=3'b000;
 			end
 		endcase
 	end

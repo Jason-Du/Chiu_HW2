@@ -1,10 +1,10 @@
 `timescale 1ns/10ps
 `include "../include/AXI_define.svh"
-//`include "SRAM_wrapper_im.sv"
-//`include "SRAM_wrapper_dm.sv"
+`include "SRAM_wrapper_im.sv"
+`include "SRAM_wrapper_dm.sv"
 `include "CPU_wrapper.sv"
-`include "AXI.sv"
-`include "SRAM_wrapper.sv"
+`include "AXI/AXI.sv"
+//`include "SRAM_wrapper.sv"
 
 module top(clk,rst);
 	input clk;
@@ -135,7 +135,7 @@ module top(clk,rst);
 	
 	CPU_wrapper cpu(
 	.clk(clk),
-	.rst(rst),
+	.rst(~rst),
 	.AWID_M1(AWID_M1),
 	.AWADDR_M1(AWADDR_M1),
 	.AWLEN_M1(AWLEN_M1),
@@ -199,7 +199,7 @@ module top(clk,rst);
 	
 	AXI axi(
 	 .ACLK(clk),
-	 .ARESETn(rst),
+	 .ARESETn(~rst),
 
 	//SLAVE INTERFACE FOR MASTERS
 	//WRITE ADDRESS
@@ -328,10 +328,10 @@ module top(clk,rst);
 );	
 
 
-SRAM_wrapper IM1(
+SRAM_wrapper_im IM1(
 //-----0------
   	.ACLK(clk),
-	.ARESETn(rst),
+	.ARESETn(~rst),
 
 	//SLAVE INTERFACE FOR MASTERS
 	//WRITE ADDRESS
@@ -371,10 +371,10 @@ SRAM_wrapper IM1(
 	.RREADY(RREADY_S0)
 );	
 	
-SRAM_wrapper DM1(
+SRAM_wrapper_dm DM1(
 //-----1------
   	.ACLK(clk),
-	.ARESETn(rst),
+	.ARESETn(~rst),
 
 	//SLAVE INTERFACE FOR MASTERS
 	//WRITE ADDRESS
