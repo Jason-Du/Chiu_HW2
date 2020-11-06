@@ -106,17 +106,22 @@ always_ff@(posedge ACLK or negedge ARESETn)begin
 			WEB<=(w_select==1'b1)?WSTRB:4'b1111;
 			A<=addr[13:0];
 				
-			RDATA<=(r_select==1'b1)?DO:RDATA;
 			DI<=(WVALID==1'b1)?WDATA:32'd0;
 		end
 		else begin
-			CS<=1'b0;
-			OE<=1'b0;
-			WEB<=4'b1111;
+			CS<=CS;
+			OE<=OE;
+			WEB<=WEB;
 			A<=addr[13:0];
 				
+			DI<=DI;
+		end
+		/////////////////////////////////////////
+		if(cs==2'b11)begin
+			RDATA<=(r_select==1'b1)?DO:RDATA;
+		end
+		else begin
 			RDATA<=RDATA;
-			DI<=32'd0;
 		end
 		/*-------------------*/
 	end

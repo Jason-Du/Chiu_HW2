@@ -3,7 +3,7 @@
 `include "SRAM_wrapper_im.sv"
 `include "SRAM_wrapper_dm.sv"
 `include "CPU_wrapper.sv"
-`include "AXI/AXI.sv"
+`include "AXI.sv"
 //`include "SRAM_wrapper.sv"
 
 module top(clk,rst);

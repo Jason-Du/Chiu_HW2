@@ -108,14 +108,17 @@ module master_read #(
 				begin
 					ns=3'b001;
 					read_pause_cpu=1'b1;
+					ARADDR_M =address;
 				end
 				else
 				begin
 					ns=3'b000;
 					read_pause_cpu=1'b0;
+					ARADDR_M =32'd0;
 				end
 				ARID_M   =default_slaveid;
-				ARADDR_M =32'd0;
+				//mofify
+				//ARADDR_M =32'd0;
 				ARVALID_M=1'b0;
 				RREADY_M =1'b0;
 				read_data=32'd0;
@@ -154,7 +157,7 @@ module master_read #(
 				read_data= (RRESP_M==2'b00 && RVALID_M==1'b1)?RDATA_M:32'd0;
 				read_pause_cpu=1'b1;
 			end
-
+			//modify state
 			3'b100:
 			begin
 				ARID_M   =slaveid;

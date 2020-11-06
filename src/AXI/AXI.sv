@@ -4,7 +4,7 @@
 // Description: Top module of AXI                  
 // Version:     1.0 
 //================================================
-//`include "../../include/AXI_define.svh"
+`include "../../include/AXI_define.svh"
 `include "read_fsm_rtl.sv"
 `include "write_fsm_rtl.sv"
 `include "write_read_arbitor_rtl.sv"
