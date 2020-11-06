@@ -212,15 +212,16 @@ module write_fsm(
 		case(cs)
 			1'b0:
 			begin
-				situation2_decode=situation_decode;
 				if(AWVALID_M1==1'b1)
 				begin
 					situation_decode=1'b1;
+					situation2_decode=1'b1;
 					ns=1'b1;
 					slave_select=AWADDR_M1[31:16];
 				end
 				else
 				begin
+					situation2_decode=1'b0;
 					situation_decode=1'b0;
 					ns=1'b0;
 					slave_select=16'd0;

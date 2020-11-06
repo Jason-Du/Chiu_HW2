@@ -51,7 +51,7 @@ module slave_im(
 	input [31:0] DO
 );
 
-logic [1:0]cs, ns;
+logic [1:0]cs, ns, one_clock;
 logic w_select, r_select, flag;
 
 logic [31:0]addr;
@@ -63,6 +63,7 @@ always_ff@(posedge ACLK or negedge ARESETn)begin
 		w_select<=1'b0; 
 		r_select<=1'b0;
 		flag<=1'b0;
+		
 	end
 	else begin
 		if((w_select==1'b0)&&(r_select==1'b0))begin
@@ -99,13 +100,23 @@ always_ff@(posedge ACLK or negedge ARESETn)begin
 		end
 		/*-------------------*/
 		/*----- memory -----*/
-		if(cs==2'b10)begin
+		if((cs==2'b10)&&(one_clock==2'b00))begin//////////////////////////////////////////////////////////////////<-----------
 			CS<=1'b1;
 			OE<=(r_select==1'b1)?1'b1:1'b0;
 			WEB<=(w_select==1'b1)?WSTRB:4'b1111;
 			A<=addr[13:0];
 				
 			DI<=(WVALID==1'b1)?WDATA:32'd0;
+			one_clock<=one_clock+2'b01;
+		end
+		else if((cs==2'b10)&&(one_clock==2'b01)) begin
+			CS<=CS;
+			OE<=OE;
+			WEB<=WEB;
+			A<=addr[13:0];
+				
+			DI<=DI;
+			one_clock<=one_clock+2'b01;
 		end
 		else begin
 			CS<=CS;
@@ -114,9 +125,10 @@ always_ff@(posedge ACLK or negedge ARESETn)begin
 			A<=addr[13:0];
 				
 			DI<=DI;
+			one_clock<=2'b00;
 		end
 		/////////////////////////////////////////
-		if(cs==2'b11)begin
+		if((cs==2'b10)&&(one_clock==2'b10))begin
 			RDATA<=(r_select==1'b1)?DO:RDATA;
 		end
 		else begin
@@ -267,8 +279,8 @@ else begin
 				RRESP=((ID==8'b00000000)&&(addr<32'h0000ffff))?2'b00:2'b11;
 				RLAST=1'b0;
 				RVALID=1'b0;
-				
-				ns=2'b11;	
+				ns=(one_clock==2'b10)?2'b11:2'b10;
+				//ns=2'b11;	
 			end
 			2'b11:begin	
 				ARREADY=1'b0;

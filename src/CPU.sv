@@ -130,6 +130,7 @@ logic                        rs2_mem_hazard;
 logic                        exe_mem_rst;
 logic        [DATA_SIZE-1:0] pc_stage1_register;
 logic        [         13:0] im_addr0;
+logic        [         31:0] im_dataout_data;
 
 //DEBUG
 
@@ -154,13 +155,14 @@ always_ff@(posedge clk or negedge rst)
 begin:pc_id
 	if (rst==1'b1)
 	begin
-		im_read_mem=1'b0;
 		pc_register_out<=32'd0;
+		im_read_mem=1'b1;
 	end
 	else
 	begin
-		im_read_mem=1'b1;
+		
 		pc_register_out<=pc_data;
+		im_read_mem=1'b1;
 	end
 end
 always_comb
@@ -172,7 +174,8 @@ begin:if_comb
 	//im_oe=1'b1;
 	//im_web=4'b1111;
 	//im_datain=32'd0;
-	stage1_register_in=(instruction_stall||bus_stall)?stage1_register_out:{im_dataout,
+	im_dataout_data=rst?32'd0:im_dataout;
+	stage1_register_in=(instruction_stall||bus_stall)?stage1_register_out:{im_dataout_data,
 						pc_register_out
 						};
 end
@@ -181,7 +184,7 @@ if_id_rst_controller ifidrst(
 					.global_rst(rst),
 					.pc_jump_control(stage3_register_out[133]),
 					.enable_jump(stage3_register_out[141]),
-					
+					.bus_stall(bus_stall),
 					.rst_data(if_id_rst)
 					);
 					//modify
@@ -309,7 +312,7 @@ id_exe_rst_controller idexerst(
 				.pc_jump_control(stage3_register_out[133]),
 				.pc_stall(pc_stall),
 				.enable_jump(stage3_register_out[141]),
-				
+				.bus_stall(bus_stall),				
 				.rst_data(id_exe_rst)
 				);
 
@@ -417,7 +420,7 @@ exe_mem_rst_controller exememrst(
 					.global_rst(rst),
 					.pc_jump_control(stage3_register_out[133]),
 					.enable_jump(stage3_register_out[141]),
-					
+					.bus_stall(bus_stall),					
 					.rst_data(exe_mem_rst)
 					);
 

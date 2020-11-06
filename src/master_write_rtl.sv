@@ -148,19 +148,19 @@ module master_write#(
 				begin
 					ns=3'b001;
 					cpu_write_pause=1'b1;
+					WDATA_M=WDATA_M_register_out;
 				end
 				else
 				begin
 					ns=3'b000;
 					cpu_write_pause=1'b0;
-					
+					WDATA_M=cpu_write_data;
 				end
 				AWID_M=default_slaveid;
 				AWADDR_M=32'd0;
 				
 				AWVALID_M=1'b0;
 					//WRITE DATA1
-				WDATA_M=32'd0;
 				WSTRB_M=cpu_write_signal?web:4'b1111;
 				WLAST_M=1'b0;
 				WVALID_M=1'b0;
@@ -183,8 +183,8 @@ module master_write#(
 				
 				AWVALID_M=1'b1;
 					//WRITE DATA1
-				WDATA_M=32'd0;
-				//WSTRB_M=WSTRB_M;
+				WDATA_M=WDATA_M_register_out;
+				//WSTRB_M=WSTRB_M;//modify
 				WSTRB_M=WSTRB_M_register_out;
 				WLAST_M=1'b0;
 				WVALID_M=1'b0;
@@ -207,8 +207,9 @@ module master_write#(
 				AWADDR_M=AWADDR_M_register_out;
 				
 				AWVALID_M=1'b0;
-					//WRITE DATA1
-				WDATA_M=WREADY_M?cpu_write_data:32'd0;
+					//WRITE DATA1//modify
+				WDATA_M=WDATA_M_register_out;
+				//WDATA_M=WREADY_M?WSTRB_M_register_out:32'd0;
 				WSTRB_M=WSTRB_M_register_out;
 				WLAST_M=1'b1;
 				WVALID_M=1'b1;
