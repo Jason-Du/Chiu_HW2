@@ -150,7 +150,7 @@ pc_controller ptl(.pc(pc_register_out),
 				  .pc_data(pc_data)
 					);
 
-always_ff@(posedge clk)
+always_ff@(posedge clk or negedge rst)
 begin:pc_id
 	if (rst==1'b1)
 	begin
@@ -203,7 +203,7 @@ pause_pc_controller ppc(
 						.pc_data(pc_stage1_register)
 									);
 									*/
-always_ff@(posedge clk)
+always_ff@(posedge clk or negedge rst)
 begin:if_id
 	if(if_id_rst==1'b1)
 	begin
@@ -313,7 +313,7 @@ id_exe_rst_controller idexerst(
 				.rst_data(id_exe_rst)
 				);
 
-always_ff@(posedge clk)
+always_ff@(posedge clk or negedge rst)
 begin:id_exe
 	if(id_exe_rst==1'b1)
 	begin
@@ -421,7 +421,7 @@ exe_mem_rst_controller exememrst(
 					.rst_data(exe_mem_rst)
 					);
 
-always_ff@(posedge clk)
+always_ff@(posedge clk or negedge rst)
 begin:exe_mem
 	if(exe_mem_rst==1'b1)
 	begin
@@ -481,7 +481,7 @@ wb_controller wbc(
 
 
 
-always_ff@(posedge clk)
+always_ff@(posedge clk or negedge rst)
 begin
 	if(rst==1'b1)
 	begin
