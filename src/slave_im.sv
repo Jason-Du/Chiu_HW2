@@ -121,7 +121,7 @@ always_ff@(posedge ACLK or negedge ARESETn)begin
 		else begin
 			CS<=CS;
 			OE<=OE;
-			WEB<=WEB;
+			WEB<=4'hf;
 			A<=addr[13:0];
 				
 			DI<=DI;

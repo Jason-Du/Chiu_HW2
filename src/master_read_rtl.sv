@@ -8,6 +8,7 @@ module master_read #(
 	clk,
 	rst,
 	cpu_read_signal,
+	im_read_pause,
 	address,
 	
 	read_data,
@@ -41,7 +42,7 @@ module master_read #(
 	input                             rst;	
 	input                             cpu_read_signal;
     input        [              31:0] address; 	
-	
+	input                             im_read_pause;
 
 	
 	
@@ -166,7 +167,7 @@ module master_read #(
 				RREADY_M =1'b1;
 				read_data= read_data_register_out;
 				read_pause_cpu=1'b0;
-				ns=3'b000;				
+				ns=	im_read_pause?3'b100:3'b000;				
 			end
 			default:
 			begin

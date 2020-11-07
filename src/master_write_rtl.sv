@@ -8,6 +8,7 @@ module master_write#(
 	rst,
 	cpu_write_signal,
 	cpu_write_data,
+	im_read_pause,
 	address,
 	web,
 	
@@ -47,6 +48,7 @@ module master_write#(
 	input        [                3:0] web;
 	input        [               31:0] cpu_write_data;
 	input        [               31:0] address;
+	input                              im_read_pause;
 	
 	output logic                       cpu_write_pause;
 
@@ -85,7 +87,7 @@ module master_write#(
 	
 	logic         [               2:0] cs;
 	logic         [               2:0] ns;
-	logic	      [               1:0] WSTRB_M_register_out;
+	logic	      [               3:0] WSTRB_M_register_out;
 	logic         [              31:0] AWADDR_M_register_out;
 	logic         [              31:0] WDATA_M_register_out;
 	logic         [  `AXI_ID_BITS-1:0] BID_M_register_out;
@@ -126,7 +128,7 @@ module master_write#(
 	begin
 		if(rst==1'b0)
 		begin
-			WSTRB_M_register_out=1'b0;
+			WSTRB_M_register_out=4'b1111;
 			AWADDR_M_register_out=32'b0;
 			WDATA_M_register_out=32'd0;
 			AWID_M_register_out=4'b0000;
@@ -148,13 +150,13 @@ module master_write#(
 				begin
 					ns=3'b001;
 					cpu_write_pause=1'b1;
-					WDATA_M=WDATA_M_register_out;
+					WDATA_M=cpu_write_data;
 				end
 				else
 				begin
 					ns=3'b000;
 					cpu_write_pause=1'b0;
-					WDATA_M=cpu_write_data;
+					WDATA_M=32'd0;
 				end
 				AWID_M=default_slaveid;
 				AWADDR_M=32'd0;
@@ -268,7 +270,7 @@ module master_write#(
 			end
 			3'b101:
 			begin
-				ns=3'b000;
+				ns=im_read_pause?3'b101:3'b000;
 				AWID_M=AWID_M_register_out;
 				AWADDR_M=AWADDR_M_register_out;
 				
