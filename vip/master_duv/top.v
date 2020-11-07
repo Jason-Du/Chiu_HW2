@@ -129,7 +129,121 @@ module top #(parameter bit COVERAGE_ON = 0) ();
     //-------------------------------------------//
     //----- you should put your design here -----//
     //-------------------------------------------//
-  
+	/*
+	always_comb
+	begin    
+	wire                        arlock_m0=1'b0;    // Read address lock type
+    wire    [PROT_WIDTH-1:0]    arprot_m0=3'b101;    // Read address protection level
+    wire    [CACHE_WIDTH-1:0]   arcache_m0=4'b0000;   // Read address cache type
+    wire    [QOS_WIDTH-1:0]     arqos_m0=4'b0000;     // Read address Quality of service
+    wire    [REGION_WIDTH-1:0]  arregion_m0=4'b0000;  // Read address slave address region
+    wire    [ARUSER_WIDTH-1:0]  aruser_m0=4'b0000;    // Read address user signal
+    wire    [RUSER_WIDTH-1:0]   ruser_m0;     // Read address user signal
+	
+	wire                        awlock_m1;    // Write address lock type
+    wire    [PROT_WIDTH-1:0]    awprot_m1;    // Write address protection level
+    wire    [CACHE_WIDTH-1:0]   awcache_m1;   // Write address cache type
+    wire    [QOS_WIDTH-1:0]     awqos_m1;     // Write address Quality of service
+    wire    [REGION_WIDTH-1:0]  awregion_m1;  // Write address slave address region
+    wire    [AWUSER_WIDTH-1:0]  awuser_m1;    // Write address user signal
+	wire    [WUSER_WIDTH-1:0]   wuser_m1;     // Write user signal
+	wire    [BUSER_WIDTH-1:0]   buser_m1;     // Write response user signal
+	
+    wire                        arlock_m1=1'b0;    // Read address lock type
+    wire    [PROT_WIDTH-1:0]    arprot_m1=3'b001;    // Read address protection level
+    wire    [CACHE_WIDTH-1:0]   arcache_m1=4'b0000;   // Read address cache type
+    wire    [QOS_WIDTH-1:0]     arqos_m1=4'b0000;     // Read address Quality of service
+    wire    [REGION_WIDTH-1:0]  arregion_m1;  // Read address slave address region
+    wire    [ARUSER_WIDTH-1:0]  aruser_m1;    // Read address user signal
+	wire    [RUSER_WIDTH-1:0]   ruser_m1;     // Read address user signal
+	wire                        csysreq;     // Low Power - Power Off Request
+    wire                        csysack;     // Low Power - Power Off Acknowledge
+    wire                        cactive;     // Low Power - activate
+		
+	end
+	*/
+  CPU_wrapper axi_duv_master(
+	.clk(aclk),
+	.rst(aresetn),
+	//im_read_signal(),
+	//dm_read_signal(),
+	//dm_write_signal(),
+	//dm_write_data(),
+	//dm_address(),
+	//im_address(),
+	//dm_web(),
+	
+	
+	//dm_pause(),
+	//im_pause(),
+	//dm_read_data(),
+	//im_read_data(),
+
+	.AWID_M1(awid_m1),
+	.AWADDR_M1(awaddr_m1),
+	.AWLEN_M1(awlen_m1),
+	.AWSIZE_M1(awsize_m1),
+	.AWBURST_M1(awburst_m1),
+	.AWVALID_M1(awvalid_m1),
+	//WRITE DATA1
+	.WDATA_M1(wdata_m1),
+	.WSTRB_M1(wstrb_m1),
+	.WLAST_M1(wlast_m1),
+	.WVALID_M1(wvalid_m1),
+	//WRITE RESPONSE1
+	.BREADY_M1(bready_m1),
+	//WRITE DATA1
+
+
+
+	.WREADY_M1(wready_m1),
+	//WRITE ADDRESS1
+	.AWREADY_M1(awready_m1),
+	//WRITE RESPONSE1
+	.BID_M1(bid_m1),
+	.BRESP_M1(bresp_m1),
+	.BVALID_M1(bvalid_m1),
+	
+	
+	
+	//READ ADDRESS0
+	.ARID_M0(arid_m0),
+	.ARADDR_M0(araddr_m0),
+	.ARLEN_M0(arlen_m0),
+	.ARSIZE_M0(arsize_m0),
+	.ARBURST_M0(arburst_m0),
+	.ARVALID_M0(arvalid_m0),
+	//READ ADDRESS1
+	.ARID_M1(arid_m1),
+	.ARADDR_M1(araddr_m1),
+	.ARLEN_M1(arlen_m1),
+	.ARSIZE_M1(arsize_m1),
+	.ARBURST_M1(arburst_m1),
+	.ARVALID_M1(arvalid_m1),
+	//READ DATA1
+	.RREADY_M1(arready_m0),
+	//READ DATA0	
+	.RREADY_M0(rready_m0),
+	
+	
+	//READ ADDRESS0
+	.ARREADY_M0(arready_m0),
+	//READ ADDRESS1
+	.ARREADY_M1(arready_m1),
+	//READ DATA1
+	.RID_M1(rid_m1),
+	.RDATA_M1(rdata_m1),
+	.RRESP_M1(rresp_m1),
+	.RLAST_M1(rlast_m1),
+	.RVALID_M1(rvalid_m1),
+	//READ DATA0
+	.RID_M0(rid_m0),
+	.RDATA_M0(rdata_m0),
+	.RRESP_M0(rresp_m0),
+	.RLAST_M0(rlast_m0),
+	.RVALID_M0(rvalid_m0)
+
+				);
 
 
 

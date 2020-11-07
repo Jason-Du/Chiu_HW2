@@ -101,7 +101,47 @@ module top #(parameter bit COVERAGE_ON = 0) ();
     //-------------------------------------------//
     //----- you should put your design here -----//
     //-------------------------------------------//
+	SRAM_wrapper_dm axi_duv_slave(
+  	.ACLK(aclk),
+	.ARESETn(aresetn),
 
+	//SLAVE INTERFACE FOR MASTERS
+	//WRITE ADDRESS
+	.AWID(awid),
+	.AWADDR(awaddr),
+	.AWLEN(awlen),
+	.AWSIZE(awsize),
+	.AWBURST(awburst),
+	.AWVALID(awvalid),
+	.AWREADY(awready),
+	//WRITE DATA
+	.WDATA(wdata),
+	.WSTRB(wstrb),
+	.WLAST(wlast),
+	.WVALID(wvalid),
+	.WREADY(wready),
+	//WRITE RESPONSE
+	.BID(bid),
+	.BRESP(bresp),
+	.BVALID(bvalid),
+	.BREADY(bready),
+
+	//READ ADDRESS
+	.ARID(arid),
+	.ARADDR(araddr),
+	.ARLEN(arlen),
+	.ARSIZE(arsize),
+	.ARBURST(arburst),
+	.ARVALID(arvalid),
+	.ARREADY(arready),
+	//READ DATA
+	.RID(rid),
+	.RDATA(rdata),
+	.RRESP(rresp),
+	.RLAST(rlast),
+	.RVALID(rvalid),
+	.RREADY(rready)
+);
 
 
 
