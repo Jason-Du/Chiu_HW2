@@ -101,7 +101,7 @@ module top #(parameter bit COVERAGE_ON = 0) ();
     //-------------------------------------------//
     //----- you should put your design here -----//
     //-------------------------------------------//
-	SRAM_wrapper_dm axi_duv_slave(
+	SRAM_wrapper axi_duv_slave(
   	.ACLK(aclk),
 	.ARESETn(aresetn),
 
