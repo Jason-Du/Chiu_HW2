@@ -3,25 +3,6 @@
 `define addr_decode_im =16'h0000;
 `define self_ID_im =8'b00000000;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 module slave_im(
 
 	input ACLK,
@@ -82,10 +63,7 @@ always_ff@(posedge ACLK or negedge ARESETn)begin
 		w_select<=1'b0; 
 		r_select<=1'b0;
 		flag<=1'b0;
-		CS<=1'b0;//////////////////////////////////////////////<----------------------------------------
-		OE<=1'b0;//////////////////////////////////////////////<----------------------------------------
-		WEB<=4'b1111;//////////////////////////////////////////////<----------------------------------------
-		A<=14'd0;//////////////////////////////////////////////<----------------------------------------		
+		
 	end
 	else begin
 		if((w_select==1'b0)&&(r_select==1'b0))begin
@@ -96,7 +74,7 @@ always_ff@(posedge ACLK or negedge ARESETn)begin
 		end
 		else begin
 			cs<=ns;
-			w_select<=((cs==2'b00)||((r_select==1'b1)&&(flag==1'b0)))?1'b0:1'b1;//////////////////////////////////////////////<----------------------------------------
+			w_select<=((cs==2'b00)||(r_select==1'b1))?1'b0:1'b1;
 			r_select<=((cs==2'b00)||(w_select==1'b1))?1'b0:1'b1;
 			flag<=(cs==2'b00)?1'b0:flag;	
 		end	
@@ -121,36 +99,41 @@ always_ff@(posedge ACLK or negedge ARESETn)begin
 			ID<=ID;
 		end
 		/*-------------------*/
-		/*----- memory -----*///////////////////////////////////////////////<----------------------------------------
-		if(((cs==2'b10)&&(one_clock==2'b00))||((ns==2'b10)&&(w_select==1'b1)))begin//////////////////////////////////////////////////////////////////<-----------
+		/*----- memory -----*/
+		if((cs==2'b10)&&(one_clock==2'b00))begin//////////////////////////////////////////////////////////////////<-----------
 			CS<=1'b1;
 			OE<=(r_select==1'b1)?1'b1:1'b0;
 			WEB<=(w_select==1'b1)?WSTRB:4'b1111;
 			A<=addr[13:0];
-			RDATA<=RDATA;
-			DI<=WDATA;
-			//DI<=(WVALID==1'b1)?WDATA:32'd0;
+				
+			DI<=(WVALID==1'b1)?WDATA:32'd0;
 			one_clock<=one_clock+2'b01;
 		end
-		else if(((cs==2'b10)&&(one_clock==2'b01))||((ns==2'b01)&&(w_select==1'b1)))begin
+		else if((cs==2'b10)&&(one_clock==2'b01)) begin
 			CS<=CS;
 			OE<=OE;
 			WEB<=WEB;
 			A<=addr[13:0];
-			RDATA<=(r_select==1'b1)?DO:RDATA;	
+				
 			DI<=DI;
 			one_clock<=one_clock+2'b01;
 		end
 		else begin
 			CS<=CS;
 			OE<=OE;
-			WEB<=4'b1111;
+			WEB<=4'hf;
 			A<=addr[13:0];
-			RDATA<=RDATA;	
+				
 			DI<=DI;
 			one_clock<=2'b00;
 		end
-		/////////////////////////////////////////////////////////////////////////////////////////////<-----------
+		/////////////////////////////////////////
+		if((cs==2'b10)&&(one_clock==2'b10))begin
+			RDATA<=(r_select==1'b1)?DO:RDATA;
+		end
+		else begin
+			RDATA<=RDATA;
+		end
 		/*-------------------*/
 	end
 end
@@ -165,8 +148,6 @@ if(flag==1'b1)begin
 				BID=ID;
 				BRESP=((ID==8'b00000000)&&(addr<32'h0000ffff))?2'b00:2'b11;
 				BVALID=1'b0;
-				
-				ns=2'b00;
 			end
 			2'b01:begin
 				AWREADY=1'b1;
@@ -188,7 +169,7 @@ if(flag==1'b1)begin
 				
 				/*-----write memory data-----*/
 				
-				ns=((WLAST==1'b1)&&(WVALID==1'b1))?2'b11:2'b10;//////////////////////////////////////////////<----------------------------------------			
+				ns=((WLAST==1'b1)&&(WVALID==1'b1))?2'b11:2'b10;			
 			end
 			2'b11:begin
 				BRESP=((ID==8'b00000000)&&(addr<32'h0000ffff))?2'b00:2'b11;
@@ -243,7 +224,7 @@ else begin
 				
 				/*-----write memory data-----*/
 				
-				ns=((WLAST==1'b1)&&(WVALID==1'b1))?2'b11:2'b10;//////////////////////////////////////////////<----------------------------------------			
+				ns=((WLAST==1'b1)&&(WVALID==1'b1))?2'b11:2'b10;			
 			end
 			2'b11:begin
 				BRESP=((ID==8'b00000000)&&(addr<32'h0000ffff))?2'b00:2'b11;

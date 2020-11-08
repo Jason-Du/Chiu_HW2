@@ -257,7 +257,7 @@ module write_fsm(
 						
 						//WRITE DATA0
 			WDATA_S0  =(slave_select==1'b1)?32'd0:WDATA_M1;
-			WSTRB_S0  =(slave_select==1'b1)?4'd0:WSTRB_M1;
+			WSTRB_S0  =(slave_select==1'b1)?4'hf:WSTRB_M1;
 			WLAST_S0  =(slave_select==1'b1)?1'd0:WLAST_M1;
 			WVALID_S0 =(slave_select==1'b1)?1'd0:WVALID_M1;
 						//WRITE RESPONSE0
@@ -276,7 +276,7 @@ module write_fsm(
 						
 						//WRITE DATA0
 			WDATA_S1  =(slave_select==1'b1)?WDATA_M1:32'd0;
-			WSTRB_S1  =(slave_select==1'b1)?WSTRB_M1:4'd0;
+			WSTRB_S1  =(slave_select==1'b1)?WSTRB_M1:4'hf;
 			WLAST_S1  =(slave_select==1'b1)?WLAST_M1:1'd0;
 			WVALID_S1 =(slave_select==1'b1)?WVALID_M1:1'd0;
 						//WRITE RESPONSE0
@@ -302,7 +302,7 @@ module write_fsm(
 						
 						//WRITE DATA0
 			WDATA_S0  =32'd0;
-			WSTRB_S0  =4'd0;
+			WSTRB_S0  =4'hf;
 			WLAST_S0  =1'd0;
 			WVALID_S0 =1'd0;
 						//WRITE RESPONSE0
@@ -318,7 +318,7 @@ module write_fsm(
 						
 						//WRITE DATA0
 			WDATA_S1  =32'd0;
-			WSTRB_S1  =4'd0;
+			WSTRB_S1  =4'hf;
 			WLAST_S1  =1'd0;
 			WVALID_S1 =1'd0;
 						//WRITE RESPONSE0
