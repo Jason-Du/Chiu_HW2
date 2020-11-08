@@ -63,6 +63,10 @@ always_ff@(posedge ACLK or negedge ARESETn)begin
 		w_select<=1'b0; 
 		r_select<=1'b0;
 		flag<=1'b0;
+		CS<=1'b0;
+		OE<=1'b0;
+		WEB<=4'hf;
+		A<=14'd0;
 		
 	end
 	else begin
