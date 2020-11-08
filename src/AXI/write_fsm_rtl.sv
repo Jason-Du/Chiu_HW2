@@ -174,7 +174,7 @@ module write_fsm(
 	logic                             situation_decode;
 	logic                             situation_decode_register_out;
 	logic        [              15:0] slave_select;
-        logic        [              15:0] slave_select_register_out;
+    logic        [              15:0] slave_select_register_out;
 	logic                             cs;
 	logic                             ns;
 	
