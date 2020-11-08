@@ -128,7 +128,8 @@ always_ff@(posedge ACLK or negedge ARESETn)begin
 			WEB<=(w_select==1'b1)?WSTRB:4'b1111;
 			A<=addr[13:0];
 			RDATA<=RDATA;
-			DI<=(WVALID==1'b1)?WDATA:32'd0;
+			DI<=WDATA;
+			//DI<=(WVALID==1'b1)?WDATA:32'd0;
 			one_clock<=one_clock+2'b01;
 		end
 		else if(((cs==2'b10)&&(one_clock==2'b01))||((ns==2'b01)&&(w_select==1'b1)))begin
