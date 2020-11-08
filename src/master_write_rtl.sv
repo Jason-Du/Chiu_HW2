@@ -128,17 +128,17 @@ module master_write#(
 	begin
 		if(rst==1'b0)
 		begin
-			WSTRB_M_register_out=4'b1111;
-			AWADDR_M_register_out=32'b0;
-			WDATA_M_register_out=32'd0;
-			AWID_M_register_out=4'b0000;
+			WSTRB_M_register_out<=4'b1111;
+			AWADDR_M_register_out<=32'b0;
+			WDATA_M_register_out<=32'd0;
+			AWID_M_register_out<=4'b0000;
 		end
 		else
 		begin
-			WSTRB_M_register_out=WSTRB_M;
-			AWADDR_M_register_out=AWADDR_M;
-			WDATA_M_register_out=WDATA_M;
-			AWID_M_register_out=AWID_M;
+			WSTRB_M_register_out<=WSTRB_M;
+			AWADDR_M_register_out<=AWADDR_M;
+			WDATA_M_register_out<=WDATA_M;
+			AWID_M_register_out<=AWID_M;
 		end
 	end
 	always_comb

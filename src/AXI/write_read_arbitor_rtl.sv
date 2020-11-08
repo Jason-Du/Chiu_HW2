@@ -37,26 +37,26 @@ module write_read_arbitor(
 	begin
 		if(rst==1'b0)
 		begin
-			cs=1'b0;
+			cs<=1'b0;
 		end
 		else
 		begin
-			cs=ns;
+			cs<=ns;
 		end
 	end
 	always_ff@(posedge clk or negedge rst)
 	begin
 		if(rst==1'b0)
 		begin
-			ARVALID_M_0stage1_register_out=1'b0;
-			ARVALID_M_1stage1_register_out=1'b0;
-			AWVALID_M_1stage1_register_out=1'b0;
+			ARVALID_M_0stage1_register_out<=1'b0;
+			ARVALID_M_1stage1_register_out<=1'b0;
+			AWVALID_M_1stage1_register_out<=1'b0;
 		end
 		else
 		begin
-			ARVALID_M_0stage1_register_out=ARVALID_M_0stage1;
-			ARVALID_M_1stage1_register_out=ARVALID_M_1stage1;
-			AWVALID_M_1stage1_register_out=AWVALID_M_1stage1;
+			ARVALID_M_0stage1_register_out<=ARVALID_M_0stage1;
+			ARVALID_M_1stage1_register_out<=ARVALID_M_1stage1;
+			AWVALID_M_1stage1_register_out<=AWVALID_M_1stage1;
 		end
 	end
 	always_comb

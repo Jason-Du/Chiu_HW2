@@ -93,11 +93,11 @@ module master_read #(
 	begin
 		if (rst==1'b0)
 		begin
-			read_data_register_out=32'd0;
+			read_data_register_out<=32'd0;
 		end
 		else
 		begin
-			read_data_register_out=read_data;
+			read_data_register_out<=read_data;
 		end
 	end
 	always_comb

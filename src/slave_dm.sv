@@ -76,6 +76,40 @@ logic w_select, r_select, flag;
 logic [31:0]addr;
 logic [7:0]ID;
 
+logic  flag_out;
+logic        CS_out;
+logic  [31:0]DI_out;
+logic        OE_out;
+logic  [1:0] one_clock_out;
+logic  [3:0] WEB_out;
+logic [31:0] addr_out;
+logic [ 7:0] ID_out;
+logic [31:0] RDATA_out;
+always_ff@(posedge ACLK or negedge ARESETn)begin
+	if(ARESETn==1'b0)begin
+		CS_out<=1'b1;
+		DI_out<=32'd0;
+		OE_out<=OE;
+		one_clock_out<=2'b00;
+		RDATA_out<=32'd0;
+		addr_out<=32'd0;
+		ID_out<=8'd0;
+		flag_out<=1'b0;
+		WEB_out<=4'b1111;
+	end
+	else
+	begin
+		CS_out<=CS;
+		DI_out<=DI;
+		OE_out<=OE;
+		one_clock_out<=one_clock;
+		RDATA_out<=RDATA;
+		addr_out<=addr;
+		ID_out<=ID;
+		flag_out<=flag;
+		WEB_out<=WEB;
+	end
+end
 always_ff@(posedge ACLK or negedge ARESETn)begin
 	if(!ARESETn)begin
 		cs<=2'b00;
@@ -95,7 +129,7 @@ always_ff@(posedge ACLK or negedge ARESETn)begin
 			cs<=ns;
 			w_select<=((cs==2'b00)||(r_select==1'b1))?1'b0:1'b1;
 			r_select<=((cs==2'b00)||(w_select==1'b1))?1'b0:1'b1;
-			flag<=(cs==2'b00)?1'b0:flag;
+			flag<=(cs==2'b00)?1'b0:flag_out;
 		end
 		/*------addr , id------*
 		/*-------------------*/
@@ -105,6 +139,7 @@ always_ff@(posedge ACLK or negedge ARESETn)begin
 		/*-------------------*/
 	end
 end
+
 always_ff@(posedge ACLK or negedge ARESETn)
 begin
 	if(ARESETn==1'b0)begin
@@ -119,77 +154,78 @@ begin
 				ID<=AWID;
 			end
 			else if((flag==1'b0)&&((AWVALID==1'b1)||(ARVALID==1'b1)))begin
-				addr<=(r_select==1'b1)?ARADDR:((w_select==1'b1)?AWADDR:addr);
-				ID<=(r_select==1'b1)?ARID:((w_select==1'b1)?AWID:ID);
+				addr<=(r_select==1'b1)?ARADDR:((w_select==1'b1)?AWADDR:addr_out);
+				ID<=(r_select==1'b1)?ARID:((w_select==1'b1)?AWID:ID_out);
 			end
 			else begin
-				addr<=addr;
-				ID<=ID;
+				addr<=addr_out;
+				ID<=ID_out;
 			end
 		end
 		else begin
-			addr<=addr;
-			ID<=ID;
-		end
-	end
-end
-always_ff@(posedge ACLK or negedge ARESETn)begin
-	if(ARESETn==1'b0)begin
-		RDATA=32'd0;
-	end
-	else begin
-		if((cs==2'b10)&&(one_clock==2'b10))begin
-			RDATA<=(r_select==1'b1)?DO:RDATA;
-		end
-		else begin
-			RDATA<=RDATA;
+			addr<=addr_out;
+			ID<=ID_out;
 		end
 	end
 end
 
 always_ff@(posedge ACLK or negedge ARESETn)begin
 	if(ARESETn==1'b0)begin
-		CS=1'b1;
-		OE=1'b0;
-		WEB=4'b1111;
-		A=14'd0;
-		DI=32'd0;
-		one_clock=2'b00;
+		RDATA<=32'd0;
+	end
+	else begin
+		if((cs==2'b10)&&(one_clock==2'b10))begin
+			RDATA<=(r_select==1'b1)?DO:RDATA_out;
+		end
+		else begin
+			RDATA<=RDATA_out;
+		end
+	end
+end
+
+always_ff@(posedge ACLK or negedge ARESETn)begin
+	if(ARESETn==1'b0)begin
+		CS<=1'b1;
+		OE<=1'b0;
+		WEB<=4'b1111;
+		A<=14'd0;
+		DI<=32'd0;
+		one_clock<=2'b00;
 	end
 	else
 	begin
 		if(cs==2'b00)
 		begin
-			CS=1'b1;
-			OE=1'b0;
-			WEB=4'b1111;
-			A=14'd0;
-			DI=32'd0;
-			one_clock=2'b00;
+			CS<=1'b1;
+			OE<=1'b0;
+			WEB<=4'b1111;
+			A<=14'd0;
+			DI<=32'd0;
+			one_clock<=2'b00;
 		end
 		else if((cs==2'b10)&&(one_clock==2'b00))begin//////////////////////////////////////////////////////////////////<-----------
-			CS=1'b1;
-			OE=(r_select==1'b1)?1'b1:1'b0;
-			WEB=(w_select==1'b1)?WSTRB:4'b1111;
-			A=addr[13:0];
-			DI=(WVALID==1'b1)?WDATA:32'd0;
-			one_clock=one_clock+2'b01;
+			CS<=1'b1;
+			OE<=(r_select==1'b1)?1'b1:1'b0;
+			WEB<=(w_select==1'b1)?WSTRB:4'b1111;
+			A<=addr[13:0];
+			DI<=(WVALID==1'b1)?WDATA:32'd0;
+			one_clock<=one_clock_out+2'b01;
 		end
 		else if((cs==2'b10)&&(one_clock==2'b01)) begin
-			CS=CS;
-			OE=OE;
-			WEB=WEB;
-			A=addr[13:0];
-			DI=DI;
-			one_clock=one_clock+2'b01;
+			CS<=CS_out;
+			OE<=OE_out;
+			WEB<=WEB_out;
+			A<=addr[13:0];
+			DI<=DI_out;
+			one_clock<=one_clock_out+2'b01;
 		end
 		else begin
-			CS=1'b1;
-			OE=1'b0;
-			WEB=4'hf;
-			A=addr[13:0];
-			DI=DI;
-			one_clock=2'b00;
+			CS<=CS_out;
+			OE<=OE_out;
+			WEB<=4'b1111;
+			A<=addr[13:0];
+			DI<=DI_out;
+			one_clock<=2'b00;
 		end
 	end
 end

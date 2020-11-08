@@ -250,24 +250,24 @@ module read_fsm(
 	begin
 		if(rst==1'b0)
 		begin
-			cs=1'b0;
+			cs<=1'b0;
 		end
 		else
 		begin
-			cs=ns;
+			cs<=ns;
 		end
 	end
 	always_ff@(posedge clk or negedge rst)
 	begin
 		if(rst==1'b0)
 		begin
-			situation_decode_register_out=2'b00;
-			slave_sel_register_out=16'd0;
+			situation_decode_register_out<=2'b00;
+			slave_sel_register_out<=16'd0;
 		end
 		else
 		begin
-			slave_sel_register_out=slave_sel;
-			situation_decode_register_out=situation_decode;
+			slave_sel_register_out<=slave_sel;
+			situation_decode_register_out<=situation_decode;
 		end
 	end
 always_comb
