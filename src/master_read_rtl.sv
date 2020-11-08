@@ -75,14 +75,14 @@ module master_read #(
 	output logic [              31:0] read_data;      
 	output logic                      read_pause_cpu;
 	
-	logic        [               2:0] cs;
-	logic        [               2:0] ns;
+	logic        [               1:0] cs;
+	logic        [               1:0] ns;
 	logic        [              31:0] read_data_register_out;
 	always_ff@(posedge clk or negedge rst)
 	begin
 		if (rst==1'b0)
 		begin
-			cs<=3'b000;
+			cs<=2'b00;
 		end
 		else
 		begin
@@ -103,17 +103,17 @@ module master_read #(
 	always_comb
 	begin
 		case(cs)
-			3'b000:
+			2'b00:
 			begin
 				if(cpu_read_signal)
 				begin
-					ns=3'b001;
+					ns=2'b01;
 					read_pause_cpu=1'b1;
 					ARADDR_M =address;
 				end
 				else
 				begin
-					ns=3'b000;
+					ns=2'b00;
 					read_pause_cpu=1'b0;
 					ARADDR_M =32'd0;
 				end
@@ -124,15 +124,15 @@ module master_read #(
 				RREADY_M =1'b0;
 				read_data=32'd0;
 			end
-			3'b001:
+			2'b01:
 			begin
 				if(ARREADY_M==1'b1)
 				begin
-					ns=3'b010;
+					ns=2'b10;
 				end
 				else
 				begin
-					ns=3'b001;
+					ns=2'b01;
 				end
 				ARID_M   =slaveid;
 				ARADDR_M =address;
@@ -141,15 +141,15 @@ module master_read #(
 				read_pause_cpu=1'b1;
 				read_data=32'd0;
 			end
-			3'b010:
+			2'b10:
 			begin
 				if (RLAST_M==1'b1)
 				begin
-					ns=3'b100;
+					ns=2'b11;
 				end
 				else
 				begin
-					ns=3'b010;
+					ns=2'b10;
 				end
 				ARID_M   =slaveid;
 				ARADDR_M =address;
@@ -159,7 +159,7 @@ module master_read #(
 				read_pause_cpu=1'b1;
 			end
 			//modify state
-			3'b100:
+			2'b11:
 			begin
 				ARID_M   =slaveid;
 				ARADDR_M =address;
@@ -167,7 +167,7 @@ module master_read #(
 				RREADY_M =1'b1;
 				read_data= read_data_register_out;
 				read_pause_cpu=1'b0;
-				ns=	im_read_pause?3'b100:3'b000;				
+				ns=	im_read_pause?2'b11:2'b00;				
 			end
 			default:
 			begin
@@ -177,7 +177,7 @@ module master_read #(
 				RREADY_M =1'b0;
 				read_pause_cpu=1'b0;
 				read_data=32'd0;
-				ns=3'b000;
+				ns=2'b00;
 			end
 		endcase
 	end
