@@ -60,7 +60,7 @@ module slave_write(
 	logic        [             13:0] A_out;
 	logic        [             31:0] address;
 	logic        [             31:0] address_register_out;
-always_ff(posedge clk or negedge rst)
+always_ff@(posedge clk or negedge rst)
 begin
 	if(rst==1'b0)
 	begin
@@ -69,7 +69,6 @@ begin
 		WEB_out<=4'b1111;
 		A_out<=32'd0;
 		address_register_out<=32'd0;
-		B
 	end
 	else
 	begin
@@ -81,7 +80,7 @@ begin
 	end
 end
 
-always_ff(posedge clk or negedge rst)
+always_ff@(posedge clk or negedge rst)
 begin
 	if(rst==1'b0)
 	begin
@@ -94,7 +93,7 @@ begin
 end
 always_comb
 begin
-	case(cs):
+	case(cs)
 	3'b000:
 	begin
 		WREADY=1'b0;
@@ -117,16 +116,16 @@ begin
 		BVALID=1'b0;
 		WEB=WVALID_register_out?WSTRB:4'b1111;
 		A=A_out;
-		DI=WVALID_register_out?WDATA:32d'0;
+		DI=WVALID_register_out?WDATA:32'd0;
 		ns=WVALID?3'b010:3'b001;
-		address=address_register_out
+		address=address_register_out;
 	end
 	3'b010:
 	begin
 		WREADY =WVALID?1'b1:1'b0;
 		AWREADY=1'b0;
 		BID    =slave_id;
-		BRESP  =(address_register_out[31:16]=={8'b00000000,slave_id})?2'b00:2'11;
+		BRESP  =(address_register_out[31:16]=={8'b00000000,slave_id})?2'b00:2'b11;
 		BVALID =1'b1;
 		WEB    =4'b1111;
 		A      =A_out;
@@ -165,17 +164,17 @@ begin
 	default:
 	begin
 		WREADY=1'b0;
-		AWREADY=;
+		AWREADY=1'b0;
 		BID=slave_id;
 		BRESP=2'b00;
-		BVALID=;
+		BVALID=1'b0;
 		WEB=4'b1111;
 		A=14'd0;
 		DI=32'd0;
 		ns=3'b000;
 		address=32'd0;
 	end
-	
+	endcase
 end
 	
 	

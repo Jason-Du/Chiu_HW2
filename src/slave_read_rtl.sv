@@ -21,8 +21,10 @@ module slave_read(
 	OE,
 	A,
 	DO,
-	slave_id;
+	slave_id
 );
+	input                             clk;
+	input                             rst;
 	input        [ `AXI_IDS_BITS-1:0] ARID;
 	input        [`AXI_ADDR_BITS-1:0] ARADDR;
 	input        [ `AXI_LEN_BITS-1:0] ARLEN;
@@ -49,7 +51,8 @@ module slave_read(
 	logic        [              31:0] RDATA_out;
 	logic        [              31:0] address;
 	logic        [              31:0] address_register_out;
-always_ff(posedge clk or negedge rst)
+	
+always_ff@(posedge clk or negedge rst)
 begin
 	if(rst==1'b0)
 	begin
@@ -61,7 +64,7 @@ begin
 	end
 end
 
-always_ff(posedge clk or negedge rst)
+always_ff@(posedge clk or negedge rst)
 begin
 	if(rst==1'b0)
 	begin
@@ -105,7 +108,7 @@ begin
 				RRESP=2'b00;
 				RLAST=1'b0;
 				RVALID=1'b0;
-				ns=ARVALID?2'b01:b00;
+				ns=ARVALID?2'b01:2'b00;
 				OE=ARVALID_register_out?1'b1:1'b0;
 				A=ARVALID_register_out?ARADDR[14:0]:14'd0;
 				address=ARVALID_register_out?ARADDR:32'd0;

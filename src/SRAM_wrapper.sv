@@ -102,7 +102,11 @@ slave_write im_write_slave(
 	.DI(DI),
 	.slave_id(8'b00000001)
 	);
-	A=AWVALID?A_write:A_read;
+	always_comb
+	begin
+	
+		A=AWVALID?A_write:A_read;
+	end
   SRAM i_SRAM (
     .A0   (A[0]  ),
     .A1   (A[1]  ),
