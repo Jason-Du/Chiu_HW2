@@ -96,7 +96,6 @@ module control(
 				read_reg        = 1'b1;
 				write_reg       = 1'b1;
 				memin_low_byte  = 1'b0;
-				//memout_low_byte = 1'b0;
 				wb_control      = 1'b1;
 				write_mem       = 1'b0;
 				read_mem        = 1'b1;
@@ -158,7 +157,7 @@ module control(
 					end
 					3'b101:
 					begin
-						alu_rd_control=(immi_data[11:5]==0000000)?5'd17:5'd18;
+						alu_rd_control=(immi_data[11:5]==7'b0000000)?5'd17:5'd18;
 						imm_control   =3'd0;
 					end
 				endcase
@@ -184,7 +183,7 @@ module control(
 				read_reg        = 1'b1;
 				write_reg       = 1'b0;
 				enable_jump     = 1'b0;
-				memin_low_byte  = 1'b0;
+				memout_low_byte  = 1'b0;
 				//memout_low_byte = 1'b0;
 				wb_control      = 1'b0;
 				write_mem       = 1'b1;
@@ -192,7 +191,7 @@ module control(
 				alu_rd_control  = 5'd0;
 				alu_pc_control  = 3'd0;
 				imm_control     = 3'd2;
-				memin_low_byte = (funt3==000)?1'b1:1'b0;
+				memin_low_byte = (funt3==3'b000)?1'b1:1'b0;
 			end
 			// Btype
 			7'b1100011:

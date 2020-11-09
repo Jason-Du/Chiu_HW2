@@ -34,7 +34,7 @@ output logic [DATA_SIZE-1:0] rs2_data;
 
 logic        [DATA_SIZE-1:0] mreg [STP_REGSIZE-1:0];
 
-always_ff@(posedge clk or negedge rst)
+always_ff@(posedge clk)
 begin:write_in_register
 	if (rst==1'b1)
 	begin
@@ -76,7 +76,7 @@ begin:write_in_register
 	begin
 		if (write_reg==1'b1)
 		begin
-			if(rd_addr==6'd0)
+			if(rd_addr==5'd0)
 			begin
 				mreg[rd_addr]<=32'd0;
 			end
@@ -91,7 +91,6 @@ begin:write_in_register
 
 end
 
-//always_ff@(posedge ~clk  or negedge rst)
 always_comb
 begin:read_register_data
 	if (rst==1'b1)

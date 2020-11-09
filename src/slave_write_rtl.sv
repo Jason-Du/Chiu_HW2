@@ -60,6 +60,7 @@ module slave_write(
 	logic        [             13:0] A_out;
 	logic        [             31:0] address;
 	logic        [             31:0] address_register_out;
+	logic        [              7:0] BID_register_out;
 always_ff@(posedge clk or negedge rst)
 begin
 	if(rst==1'b0)
@@ -69,6 +70,7 @@ begin
 		WEB_out<=4'b1111;
 		A_out<=32'd0;
 		address_register_out<=32'd0;
+		BID_register_out<=8'b0;
 	end
 	else
 	begin
@@ -77,6 +79,7 @@ begin
 		WVALID_register_out<=WVALID;
 		A_out<=A;
 		address_register_out<=address;
+		BID_register_out<=BID;
 	end
 end
 
@@ -98,33 +101,33 @@ begin
 	begin
 		WREADY=1'b0;
 		AWREADY=AWVALID_register_out?1'b1:1'b0;
-		BID=slave_id;
+		BID=AWVALID?{4'b0000,AWID}:8'd0;
 		BRESP=2'b00;
 		BVALID=1'b0;
 		WEB=4'b1111;
 		A=AWVALID_register_out?AWADDR[14:0]:14'd0;
 		DI=32'd0;
-		ns=AWVALID?3'b001:3'b000;
+		ns=AWVALID_register_out?3'b001:3'b000;
 		address=address_register_out?AWADDR:32'd0;
 	end
 	3'b001:
 	begin
 		WREADY=WVALID_register_out?1'b1:1'b0;
 		AWREADY=AWVALID?1'b1:1'b0;
-		BID=slave_id;
+		BID=BID_register_out;
 		BRESP=2'b00;
 		BVALID=1'b0;
 		WEB=WVALID_register_out?WSTRB:4'b1111;
 		A=A_out;
 		DI=WVALID_register_out?WDATA:32'd0;
-		ns=WVALID?3'b010:3'b001;
+		ns=WVALID_register_out?3'b010:3'b001;
 		address=address_register_out;
 	end
 	3'b010:
 	begin
 		WREADY =WVALID?1'b1:1'b0;
 		AWREADY=1'b0;
-		BID    =slave_id;
+		BID    =BID_register_out;
 		BRESP  =(address_register_out[31:16]=={8'b00000000,slave_id})?2'b00:2'b11;
 		BVALID =1'b1;
 		WEB    =4'b1111;
@@ -138,7 +141,7 @@ begin
 	begin
 		WREADY=1'b0;
 		AWREADY=1'b0;
-		BID=slave_id;
+		BID={4'b0000,AWID};
 		BRESP=2'b00
 		BVALID=1'b0;
 		WEB=4'b1111;
@@ -151,7 +154,7 @@ begin
 	begin
 		WREADY=1'b0;
 		AWREADY=;
-		BID=slave_id;
+		BID={4'b0000,AWID};
 		BRESP=2'b00;
 		BVALID=;
 		WEB=;
@@ -165,7 +168,7 @@ begin
 	begin
 		WREADY=1'b0;
 		AWREADY=1'b0;
-		BID=slave_id;
+		BID={4'b0000,AWID};
 		BRESP=2'b00;
 		BVALID=1'b0;
 		WEB=4'b1111;

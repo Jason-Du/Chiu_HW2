@@ -51,6 +51,7 @@ module slave_read(
 	logic        [              31:0] RDATA_out;
 	logic        [              31:0] address;
 	logic        [              31:0] address_register_out;
+	logic        [               7:0] RID_register_out;
 	
 always_ff@(posedge clk or negedge rst)
 begin
@@ -72,6 +73,7 @@ begin
 		A_register_out<=32'd0;
 		RDATA_out<=32'd0;
 		address_register_out<=32'd0;
+		RID_register_out<=8'b00000000;
 
 	end
 	else
@@ -80,6 +82,7 @@ begin
 		A_register_out<=A;
 		RDATA_out<=RDATA;
 		address_register_out<=address;
+		RID_register_out<=RID;
 	end
 end
 
@@ -103,7 +106,7 @@ begin
 			2'b00:
 			begin:get_vaild_signal
 				ARREADY=ARVALID_register_out?1'b1:1'b0;
-				RID=slave_id;
+				RID=8'b00000000;
 				RDATA=32'd0;
 				RRESP=2'b00;
 				RLAST=1'b0;
@@ -116,7 +119,7 @@ begin
 			2'b01:
 			begin:get_data
 				ARREADY=ARVALID?1'b1:1'b0;
-				RID=slave_id;
+				RID={4'b0000,ARID};
 				RDATA=DO;
 				RRESP=2'b00;
 				RLAST=1'b0;
@@ -129,7 +132,7 @@ begin
 			2'b10:
 			begin
 				ARREADY=1'b0;
-				RID=slave_id;
+				RID=RID_register_out;
 				RDATA=RDATA_out;
 				RRESP=(address_register_out[31:16]=={8'b00000000,slave_id})?2'b00:2'b11;
 				RLAST=1'b1;
@@ -142,7 +145,7 @@ begin
 			default:
 			begin
 				ARREADY=1'b0;
-				RID=slave_id;
+				RID=8'b00000000;
 				RDATA=32'd0;
 				RRESP=2'b00;
 				RLAST=1'b0;
