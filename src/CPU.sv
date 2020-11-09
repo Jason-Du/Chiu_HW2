@@ -176,9 +176,7 @@ begin:if_comb
 	//im_web=4'b1111;
 	//im_datain=32'd0;
 	im_dataout_data=rst?32'd0:im_dataout;
-	stage1_register_in=(bus_stall||instruction_stall)?stage1_register_out:{im_dataout_data,
-						pc_register_out
-						};
+	stage1_register_in=if_id_rst?64'd0:((bus_stall||instruction_stall)?stage1_register_out:{im_dataout_data,pc_register_out});
 end
 if_id_rst_controller ifidrst(
 					.local_rst(stage3_register_out[134]),
@@ -207,9 +205,9 @@ pause_pc_controller ppc(
 						.pc_data(pc_stage1_register)
 									);
 									*/
-always_ff@(posedge clk)
+always_ff@(posedge clk or negedge rst)
 begin:if_id
-	if(if_id_rst==1'b1)
+	if(rst==1'b1)
 	begin
 		stage1_register_out<=64'd0;
 	end
@@ -220,7 +218,7 @@ begin:if_id
 end
 always_comb
 begin:id_comb
-	stage2_register_in=(bus_stall||instruction_stall)?stage2_register_out:{
+	stage2_register_in=id_exe_rst?158'd0:((bus_stall)?stage2_register_out:{
 						wb_control,
 						enable_jump,
 						write_reg,
@@ -237,7 +235,7 @@ begin:id_comb
 						rs2_data,
 						imm_data,
 						stage1_register_out[31:0]
-						};	
+						});	
 end
 decoder dc(
 			.instruction(stage1_register_out[63:32]),
@@ -319,7 +317,7 @@ id_exe_rst_controller idexerst(
 
 always_ff@(posedge clk or negedge rst)
 begin:id_exe
-	if(id_exe_rst==1'b1)
+	if(rst==1'b1)
 	begin
 		stage2_register_out<=158'd0;
 	end
@@ -330,7 +328,7 @@ begin:id_exe
 end
 always_comb
 begin:exe_comb
-	stage3_register_in=(bus_stall)?stage3_register_out:{
+	stage3_register_in=exe_mem_rst?143'd0:((bus_stall)?stage3_register_out:{
 					stage2_register_out[157],
 					stage2_register_out[156],
 					stage2_register_out[155],
@@ -346,7 +344,7 @@ begin:exe_comb
 					alu_rd_data,
 					src2_data,
 					pc_jump_address
-					};
+					});
 end
 
 alu_in_selector ais(
@@ -428,7 +426,7 @@ exe_mem_rst_controller exememrst(
 
 always_ff@(posedge clk or negedge rst)
 begin:exe_mem
-	if(exe_mem_rst==1'b1)
+	if(rst==1'b1)
 	begin
 		stage3_register_out<=143'd0;
 	end
