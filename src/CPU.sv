@@ -131,7 +131,7 @@ logic                        rs2_exe_hazard;
 logic                        rs2_mem_hazard;
 logic                        exe_mem_rst;
 logic        [DATA_SIZE-1:0] pc_stage1_register;
-logic        [         13:0] im_addr0;
+//logic        [         13:0] im_addr0;
 logic        [         31:0] im_dataout_data;
 
 //DEBUG
@@ -169,8 +169,8 @@ end
 always_comb
 begin:if_comb
 	next_pc=pc_register_out+32'd4;
-	im_addr0=pc_register_out[13:0]>>2;
-	im_addr={16'h0000,2'b00,im_addr0};
+	//unsigned'(mem_addr)>>2
+	im_addr=unsigned'(pc_register_out)>>2;
 	//im_cs=1'b1;
 	//im_oe=1'b1;
 	//im_web=4'b1111;
@@ -444,7 +444,7 @@ begin:mem_comb
 	//dm_cs=1'b1;
 	dm_read_mem=stage3_register_out[138];
 	dm_write_mem=stage3_register_out[139];
-	dm_addr={16'h0001,2'b00,quotient[13:0]};
+	dm_addr=quotient;
 	dm_web=(stage3_register_out[139])?web_data:4'b1111;
 	stage4_register_in=(bus_stall)?stage4_register_out:{
 					stage3_register_out[140],

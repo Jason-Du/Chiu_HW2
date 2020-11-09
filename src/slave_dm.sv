@@ -174,7 +174,8 @@ if(flag==1'b1)begin
 				AWREADY=1'b0;
 				WREADY=1'b0;
 				BID=ID;
-				BRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
+				BRESP=(addr<32'h0001ffff)?2'b00:2'b11;
+				//BRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
 				BVALID=1'b0;
 				
 				ns=2'b00;
@@ -183,7 +184,8 @@ if(flag==1'b1)begin
 				AWREADY=1'b1;
 				WREADY=1'b0;
 				BID=ID;
-				BRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
+				BRESP=(addr<32'h0001ffff)?2'b00:2'b11;
+				//BRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
 				BVALID=1'b0;
 				
 				/*GET ~~~ADDR & ID~~~*/
@@ -194,7 +196,8 @@ if(flag==1'b1)begin
 				AWREADY=1'b0;
 				WREADY=1'b1;
 				BID=ID;
-				BRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
+				BRESP=(addr<32'h0001ffff)?2'b00:2'b11;
+				//BRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
 				BVALID=1'b0;
 				
 				/*-----write memory data-----*/
@@ -202,7 +205,7 @@ if(flag==1'b1)begin
 				ns=((WLAST==1'b1)&&(WVALID==1'b1))?2'b11:2'b10;			
 			end
 			2'b11:begin
-				BRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
+				//BRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
 				AWREADY=1'b0;
 				WREADY=1'b0;
 				BID=ID;
@@ -233,7 +236,8 @@ else begin
 			2'b00:begin
 				ARREADY=1'b0;
 				RID=ID;
-				RRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
+				RRESP=(addr<32'h0001ffff)?2'b00:2'b11;
+				//RRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
 				RLAST=1'b0;
 				RVALID=1'b0;
 				
@@ -242,7 +246,8 @@ else begin
 			2'b01:begin
 				ARREADY=1'b1;
 				RID=ID;
-				RRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
+				RRESP=(addr<32'h0001ffff)?2'b00:2'b11;
+				//RRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
 				RLAST=1'b0;
 				RVALID=1'b0;
 				
@@ -255,7 +260,8 @@ else begin
 				
 				ARREADY=1'b0;
 				RID=ID;
-				RRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
+				RRESP=(addr<32'h0001ffff)?2'b00:2'b11;
+				//RRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
 				RLAST=1'b0;
 				RVALID=1'b0;
 				ns=(one_clock==2'b10)?2'b11:2'b10;
@@ -264,7 +270,8 @@ else begin
 			2'b11:begin	
 				ARREADY=1'b0;
 				RID=ID;
-				RRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
+				RRESP=(addr<32'h0001ffff)?2'b00:2'b11;
+				//RRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
 				RLAST=1'b1;
 				RVALID=1'b1;
 				
