@@ -44,9 +44,8 @@ module SRAM_wrapper(
 	input RREADY
 );
 
-logic CS;
-logic OE;
-logic [3:0] WEB;
+logic 	     OE;
+logic [ 3:0] WEB;
 logic [13:0] A;
 logic [31:0] DI;
 logic [31:0] DO;
@@ -105,22 +104,22 @@ slave_write im_write_slave(
 	.DI(DI),
 	.slave_id(8'b00000001)
 	);
-always_ff@(posedge clk)
+always_ff@(posedge ACLK or negedge ARESETn)
 begin
-	if(rst==1'b0)
+	if(ARESETn==1'b0)
 		cs<=1'b0;
 	else
 	begin
 		cs<=ns;
 	end
 end
-always_ff@(posedge clk)
+always_ff@(posedge ACLK or negedge ARESETn)
 begin
-	if(rst==1'b0)
+	if(ARESETn==1'b0)
 		A_register_out<=14'd0;
 	else
 	begin
-		A_register_out=A;
+		A_register_out<=A;
 	end
 end
 always_comb
@@ -128,12 +127,12 @@ begin
 	if(cs==1'b0)
 	begin
 		A=AWVALID?A_write:A_read;
-		ns=(AWVALID||ARVALID)?1'b0:1'b1
+		ns=(AWVALID||ARVALID)?1'b0:1'b1;
 	end
 	else
 	begin
-		A=A_register_out
-		ns=((BVALID&&BREADY)||(RVALID&&RREADY))?1'b0:1'b1
+		A=A_register_out;
+		ns=((BVALID&&BREADY)||(RVALID&&RREADY))?1'b0:1'b1;
 	end
 end
   SRAM i_SRAM (
