@@ -115,7 +115,7 @@ module master_write#(
 	*/
 	always_ff@(posedge clk or negedge rst)
 	begin
-		if (rst==1'b0)
+		if(!rst)
 		begin
 			cs<=3'b000;
 		end
@@ -126,7 +126,7 @@ module master_write#(
 	end
 	always_ff@(posedge clk or negedge rst)
 	begin
-		if(rst==1'b0)
+		if(!rst)
 		begin
 			WSTRB_M_register_out<=4'b1111;
 			AWADDR_M_register_out<=32'b0;

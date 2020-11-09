@@ -82,7 +82,7 @@ module master_read #(
 	logic        [              31:0] read_data_register_out;
 	always_ff@(posedge clk or negedge rst)
 	begin
-		if (rst==1'b0)
+		if(!rst)
 		begin
 			cs<=3'b00;
 		end
@@ -93,7 +93,7 @@ module master_read #(
 	end
 	always_ff@(posedge clk or negedge rst)
 	begin
-		if (rst==1'b0)
+		if(!rst)
 		begin
 			read_data_register_out<=32'd0;
 		end
@@ -180,7 +180,7 @@ module master_read #(
 				RREADY_M =1'b0;
 				read_pause_cpu=1'b0;
 				read_data=32'd0;
-				ns=2'b00;
+				ns=3'b000;
 			end
 		endcase
 	end

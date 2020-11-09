@@ -178,15 +178,15 @@ module write_fsm(
 	logic                             cs;
 	logic                             ns;
 	
-	always_ff@(posedge clk)
+	always_ff@(posedge clk or negedge rst)
 	begin
-		if(rst==1'b0)
+		if(!rst)
 		begin
-			cs=1'b0;
+			cs<=1'b0;
 		end
 		else
 		begin
-			cs=ns;
+			cs<=ns;
 		end
 	end
 	always_ff@(posedge clk or negedge rst)
@@ -195,15 +195,15 @@ module write_fsm(
 	end
 	always_ff@(posedge clk or negedge rst)
 	begin
-		if (rst==1'b0)
+		if(!rst)
 		begin
-			situation_decode_register_out=1'b0;
-			slave_select_register_out=16'd0;
+			situation_decode_register_out<=1'b0;
+			slave_select_register_out<=16'd0;
 		end
 		else
 		begin
-			situation_decode_register_out=situation_decode;
-			slave_select_register_out=slave_select;
+			situation_decode_register_out<=situation_decode;
+			slave_select_register_out<=slave_select;
 		end
 	
 	end
@@ -240,48 +240,48 @@ module write_fsm(
 	begin
 		if(situation_decode==1'b1)
 		begin
-			WREADY_M1 =(slave_select==1'b1)?WREADY_S1:WREADY_S0;
+			WREADY_M1 =(slave_select==16'd1)?WREADY_S1:WREADY_S0;
 						//WRITE ADDRESS
-			AWREADY_M1=(slave_select==1'b1)?AWREADY_S1:AWREADY_S0;
+			AWREADY_M1=(slave_select==16'd1)?AWREADY_S1:AWREADY_S0;
 						//WRITE RESPONSE
-			BID_M1    =(slave_select==1'b1)?BID_S1[3:0]:BID_S0[3:0];
-			BRESP_M1  =(slave_select==1'b1)?BRESP_S1:BRESP_S0;
-			BVALID_M1 =(slave_select==1'b1)?BVALID_S1:BVALID_S0;
+			BID_M1    =(slave_select==16'd1)?BID_S1[3:0]:BID_S0[3:0];
+			BRESP_M1  =(slave_select==16'd1)?BRESP_S1:BRESP_S0;
+			BVALID_M1 =(slave_select==16'd1)?BVALID_S1:BVALID_S0;
 						//WRITE ADDRESS0
 
-			AWID_S0   =(slave_select==1'b1)?8'd0:{4'b0000,AWID_M1};
-			AWADDR_S0 =(slave_select==1'b1)?32'd0:AWADDR_M1;
-			AWLEN_S0  =(slave_select==1'b1)?4'd0:AWLEN_M1;
-			AWSIZE_S0 =(slave_select==1'b1)?3'd2:AWSIZE_M1;
-			AWBURST_S0=(slave_select==1'b1)?2'd1:AWBURST_M1;
-			AWVALID_S0=(slave_select==1'b1)?1'b0:AWVALID_M1_IN;
+			AWID_S0   =(slave_select==16'd1)?8'd0:{4'b0000,AWID_M1};
+			AWADDR_S0 =(slave_select==16'd1)?32'd0:AWADDR_M1;
+			AWLEN_S0  =(slave_select==16'd1)?4'd0:AWLEN_M1;
+			AWSIZE_S0 =(slave_select==16'd1)?3'd2:AWSIZE_M1;
+			AWBURST_S0=(slave_select==16'd1)?2'd1:AWBURST_M1;
+			AWVALID_S0=(slave_select==16'd1)?1'b0:AWVALID_M1_IN;
 						
 						//WRITE DATA0
-			WDATA_S0  =(slave_select==1'b1)?32'd0:WDATA_M1;
-			WSTRB_S0  =(slave_select==1'b1)?4'd0:WSTRB_M1;
-			WLAST_S0  =(slave_select==1'b1)?1'd0:WLAST_M1;
-			WVALID_S0 =(slave_select==1'b1)?1'd0:WVALID_M1;
+			WDATA_S0  =(slave_select==16'd1)?32'd0:WDATA_M1;
+			WSTRB_S0  =(slave_select==16'd1)?4'd0:WSTRB_M1;
+			WLAST_S0  =(slave_select==16'd1)?1'd0:WLAST_M1;
+			WVALID_S0 =(slave_select==16'd1)?1'd0:WVALID_M1;
 						//WRITE RESPONSE0
-			BREADY_S0 =(slave_select==1'b1)?1'd0:BREADY_M1;
+			BREADY_S0 =(slave_select==16'd1)?1'd0:BREADY_M1;
 						//WRITE DATA0
 						//WRITE ADDRESS1
 
 
 
-			AWID_S1   =(slave_select==1'b1)?{4'b0000,AWID_M1}:8'd0;
-			AWADDR_S1 =(slave_select==1'b1)?AWADDR_M1:32'd0;
-			AWLEN_S1  =(slave_select==1'b1)?AWLEN_M1:4'd0;
-			AWSIZE_S1 =(slave_select==1'b1)?AWSIZE_M1:3'd2;
-			AWBURST_S1=(slave_select==1'b1)?AWBURST_M1:2'd1;
-			AWVALID_S1=(slave_select==1'b1)?AWVALID_M1_IN:1'b0;
+			AWID_S1   =(slave_select==16'd1)?{4'b0000,AWID_M1}:8'd0;
+			AWADDR_S1 =(slave_select==16'd1)?AWADDR_M1:32'd0;
+			AWLEN_S1  =(slave_select==16'd1)?AWLEN_M1:4'd0;
+			AWSIZE_S1 =(slave_select==16'd1)?AWSIZE_M1:3'd2;
+			AWBURST_S1=(slave_select==16'd1)?AWBURST_M1:2'd1;
+			AWVALID_S1=(slave_select==16'd1)?AWVALID_M1_IN:1'b0;
 						
 						//WRITE DATA0
-			WDATA_S1  =(slave_select==1'b1)?WDATA_M1:32'd0;
-			WSTRB_S1  =(slave_select==1'b1)?WSTRB_M1:4'd0;
-			WLAST_S1  =(slave_select==1'b1)?WLAST_M1:1'd0;
-			WVALID_S1 =(slave_select==1'b1)?WVALID_M1:1'd0;
+			WDATA_S1  =(slave_select==16'd1)?WDATA_M1:32'd0;
+			WSTRB_S1  =(slave_select==16'd1)?WSTRB_M1:4'd0;
+			WLAST_S1  =(slave_select==16'd1)?WLAST_M1:1'd0;
+			WVALID_S1 =(slave_select==16'd1)?WVALID_M1:1'd0;
 						//WRITE RESPONSE0
-			BREADY_S1 =(slave_select==1'b1)?BREADY_M1:1'd0;
+			BREADY_S1 =(slave_select==16'd1)?BREADY_M1:1'd0;
 		end
 		else
 		begin
@@ -290,7 +290,7 @@ module write_fsm(
 						//WRITE ADDRESS
 			AWREADY_M1=1'b0;
 						//WRITE RESPONSE
-			BID_M1    =1'b0;
+			BID_M1    =4'd0;
 			BRESP_M1  =2'b00;
 			BVALID_M1 =1'b0;
 						//WRITE ADDRESS0

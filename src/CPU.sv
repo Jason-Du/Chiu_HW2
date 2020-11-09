@@ -155,7 +155,7 @@ pc_controller ptl(.pc(pc_register_out),
 
 always_ff@(posedge clk or negedge rst)
 begin:pc_id
-	if (rst==1'b1)
+	if (rst)
 	begin
 		pc_register_out<=32'd0;
 		im_read_mem<=1'b1;
@@ -207,7 +207,7 @@ pause_pc_controller ppc(
 						.pc_data(pc_stage1_register)
 									);
 									*/
-always_ff@(posedge clk or negedge rst)
+always_ff@(posedge clk)
 begin:if_id
 	if(if_id_rst==1'b1)
 	begin

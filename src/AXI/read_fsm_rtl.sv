@@ -237,7 +237,7 @@ module read_fsm(
 					ns=(RVALID_M1&&RREADY_M1)?1'b0:1'b1;
 					situation2_decode=(RVALID_M1&&RREADY_M1)?2'b00:2'b01;
 				end
-				else if(situation_decode==2'b10)
+				else
 				begin
 					ns=(RVALID_M0&&RREADY_M0)?1'b0:1'b1;
 					situation2_decode=(RVALID_M0&&RREADY_M0)?2'b00:2'b10;

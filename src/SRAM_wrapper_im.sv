@@ -43,12 +43,12 @@ module SRAM_wrapper_im(
 	input RREADY
 );
 
-wire CS;
-wire OE;
-wire [3:0] WEB;
-wire [13:0] A;
-wire [31:0] DI;
-wire [31:0] DO;
+logic CS;
+logic OE;
+logic [3:0] WEB;
+logic [13:0] A;
+logic [31:0] DI;
+logic [31:0] DO;
 
 slave_im slave_0(
 

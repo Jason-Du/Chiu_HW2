@@ -237,7 +237,7 @@ module read_fsm(
 					ns=(RVALID_M1&&RREADY_M1)?1'b0:1'b1;
 					situation2_decode=(RVALID_M1&&RREADY_M1)?2'b00:2'b01;
 				end
-				else if(situation_decode==2'b10)
+				else
 				begin
 					ns=(RVALID_M0&&RREADY_M0)?1'b0:1'b1;
 					situation2_decode=(RVALID_M0&&RREADY_M0)?2'b00:2'b10;
@@ -248,26 +248,26 @@ module read_fsm(
 	end
 	always_ff@(posedge clk or negedge rst)
 	begin
-		if(rst==1'b0)
+		if(!rst)
 		begin
-			cs=1'b0;
+			cs<=1'b0;
 		end
 		else
 		begin
-			cs=ns;
+			cs<=ns;
 		end
 	end
 	always_ff@(posedge clk or negedge rst)
 	begin
-		if(rst==1'b0)
+		if(!rst)
 		begin
-			situation_decode_register_out=2'b00;
-			slave_sel_register_out=16'd0;
+			situation_decode_register_out<=2'b00;
+			slave_sel_register_out<=16'd0;
 		end
 		else
 		begin
-			slave_sel_register_out=slave_sel;
-			situation_decode_register_out=situation_decode;
+			slave_sel_register_out<=slave_sel;
+			situation_decode_register_out<=situation_decode;
 		end
 	end
 always_comb
@@ -276,7 +276,7 @@ begin
 		2'b00:
 		begin
 			//slave_sel =16'd0;
-			RID_M0    =3'd0;
+			RID_M0    =4'd0;
 			RDATA_M0  =32'd0;
 			RRESP_M0  =2'd0;
 			RLAST_M0  =1'b0;
@@ -312,7 +312,7 @@ begin
 		end
 		2'b01:
 		begin
-			RID_M0    =3'd0;
+			RID_M0    =4'd0;
 			RDATA_M0  =32'd0;
 			RRESP_M0  =2'd0;
 			RLAST_M0  =1'b0;
@@ -353,7 +353,7 @@ begin
 		end
 		2'b10:
 		begin
-			RID_M1    =3'd0;
+			RID_M1    =4'd0;
 			RDATA_M1  =32'd0;
 			RRESP_M1  =2'd0;
 			RLAST_M1  =1'b0;
@@ -397,7 +397,7 @@ begin
 		2'b11:
 		begin
 			//slave_sel =16'd0;
-			RID_M0    =3'd0;
+			RID_M0    =4'd0;
 			RDATA_M0  =32'd0;
 			RRESP_M0  =2'd0;
 			RLAST_M0  =1'b0;
