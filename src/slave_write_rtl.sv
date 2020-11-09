@@ -56,7 +56,7 @@ module slave_write(
 	logic        [              2:0] ns;
 	logic                            AWVALID_register_out;
 	logic                            WVALID_register_out;
-	logic        [              2:0] WEB_out;
+	logic        [              3:0] WEB_out;
 	logic        [             13:0] A_out;
 	logic        [             31:0] address;
 	logic        [             31:0] address_register_out;
@@ -108,7 +108,7 @@ begin
 		A=AWVALID_register_out?AWADDR[14:0]:14'd0;
 		DI=32'd0;
 		ns=AWVALID_register_out?3'b001:3'b000;
-		address=address_register_out?AWADDR:32'd0;
+		address=AWVALID_register_out?AWADDR:32'd0;
 	end
 	3'b001:
 	begin

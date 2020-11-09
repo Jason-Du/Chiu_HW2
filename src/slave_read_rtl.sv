@@ -112,9 +112,9 @@ begin
 				RLAST=1'b0;
 				RVALID=1'b0;
 				ns=ARVALID?2'b01:2'b00;
-				OE=ARVALID_register_out?1'b1:1'b0;
-				A=ARVALID_register_out?ARADDR[14:0]:14'd0;
-				address=ARVALID_register_out?ARADDR:32'd0;
+				OE=ARVALID?1'b1:1'b0;
+				A=ARADDR[14:0];
+				address=ARVALID?ARADDR:32'd0;
 			end
 			2'b01:
 			begin:get_data
@@ -137,10 +137,23 @@ begin
 				RRESP=(address_register_out[31:16]=={8'b00000000,slave_id})?2'b00:2'b11;
 				RLAST=1'b1;
 				RVALID=1'b1;		
-				ns=RREADY?2'b00:2'b10;			
+				ns=RREADY?2'b11:2'b10;			
 				OE=1'b1;
 				A=A_register_out;
 				address=address_register_out;				
+			end
+			2'b11:
+			begin
+				ARREADY=1'b0;
+				RID=RID_register_out;
+				RDATA=RDATA_out;
+				RRESP=(address_register_out[31:16]=={8'b00000000,slave_id})?2'b00:2'b11;
+				RLAST=1'b1;
+				RVALID=1'b1;		
+				ns=2'b00;			
+				OE=1'b1;
+				A=A_register_out;
+				address=address_register_out;					
 			end
 			default:
 			begin

@@ -50,8 +50,11 @@ logic [3:0] WEB;
 logic [13:0] A;
 logic [31:0] DI;
 logic [31:0] DO;
-logic [31:0] A_write;
-logic [31:0] A_read;
+logic [13:0] A_write;
+logic [13:0] A_read;
+logic [13:0] A_register_out;
+logic        cs;
+logic        ns;
 
 slave_read im_read_slave(
 	.clk(ACLK),
@@ -102,11 +105,37 @@ slave_write im_write_slave(
 	.DI(DI),
 	.slave_id(8'b00000001)
 	);
-	always_comb
+always_ff@(posedge clk)
+begin
+	if(rst==1'b0)
+		cs<=1'b0;
+	else
 	begin
-	
-		A=AWVALID?A_write:A_read;
+		cs<=ns;
 	end
+end
+always_ff@(posedge clk)
+begin
+	if(rst==1'b0)
+		A_register_out<=14'd0;
+	else
+	begin
+		A_register_out=A;
+	end
+end
+always_comb
+begin
+	if(cs==1'b0)
+	begin
+		A=AWVALID?A_write:A_read;
+		ns=(AWVALID||ARVALID)?1'b0:1'b1
+	end
+	else
+	begin
+		A=A_register_out
+		ns=((BVALID&&BREADY)||(RVALID&&RREADY))?1'b0:1'b1
+	end
+end
   SRAM i_SRAM (
     .A0   (A[0]  ),
     .A1   (A[1]  ),
@@ -192,7 +221,7 @@ slave_write im_write_slave(
     .WEB2 (WEB[2]),
     .WEB3 (WEB[3]),
     .OE   (OE    ),
-    .CS   (CS    )
+    .CS   (1'b1  )
   );
 
 endmodule

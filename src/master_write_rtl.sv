@@ -249,11 +249,11 @@ module master_write#(
 			begin
 				if(BVALID_M==1'b1 && BRESP_M==2'b00)
 				begin
-					ns=3'b000;
+					ns=3'b101;
 				end
 				else
 				begin
-					ns=3'b101;
+					ns=3'b100;
 				end
 				AWID_M=AWID_M_register_out;
 				AWADDR_M=AWADDR_M_register_out;

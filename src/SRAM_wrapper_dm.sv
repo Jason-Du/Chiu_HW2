@@ -1,5 +1,6 @@
 `timescale 1ns/10ps
-`include "slave_dm.sv"
+`include "slave_write_rtl.sv"
+`include "slave_read_rtl.sv"
 `include "../include/AXI_define.svh"
 module SRAM_wrapper_dm(
   	input ACLK,
@@ -43,25 +44,46 @@ module SRAM_wrapper_dm(
 	input RREADY
 );
 
-logic CS;
+
 logic OE;
 logic [3:0] WEB;
 logic [13:0] A;
 logic [31:0] DI;
 logic [31:0] DO;
+logic [13:0] A_write;
+logic [13:0] A_read;
 
-slave_dm slave_1(
+slave_read dm_read_slave(
+	.clk(ACLK),
+	.rst(ARESETn),
+	.ARID(ARID),
+	.ARADDR(ARADDR),
+	.ARLEN(ARLEN),
+	.ARSIZE(ARSIZE),
+	.ARBURST(ARBURST),
+	.ARVALID(ARVALID),
+	.ARREADY(ARREADY),
+	//READ DATA
+	.RID(RID),
+	.RDATA(RDATA),
+	.RRESP(RRESP),
+	.RLAST(RLAST),
+	.RVALID(RVALID),
+	.RREADY(RREADY),
+	.OE(OE),
+	.A(A_read),
+	.DO(DO),
+	.slave_id(8'b00000001)
+);
+slave_write dm_write_slave(
 
-	.ACLK(ACLK),
-	.ARESETn(ARESETn),
-
-	//SLAVE INTERFACE FOR MASTERS
-	//WRITE ADDRESS
+	.clk(ACLK),
+	.rst(ARESETn),
 	.AWID(AWID),
 	.AWADDR(AWADDR),
-	.AWLEN(4'b0000),
-	.AWSIZE(3'b010),
-	.AWBURST(2'b01),
+	.AWLEN(AWLEN),
+	.AWSIZE(AWSIZE),
+	.AWBURST(AWBURST),
 	.AWVALID(AWVALID),
 	.AWREADY(AWREADY),
 	//WRITE DATA
@@ -75,31 +97,16 @@ slave_dm slave_1(
 	.BRESP(BRESP),
 	.BVALID(BVALID),
 	.BREADY(BREADY),
-
-	//READ ADDRESS
-	.ARID(ARID),
-	.ARADDR(ARADDR),
-	.ARLEN(4'b0000),
-	.ARSIZE(3'b010),
-	.ARBURST(2'b01),
-	.ARVALID(ARVALID),
-	.ARREADY(ARREADY),
-	//READ DATA
-	.RID(RID),
-	.RDATA(RDATA),
-	.RRESP(RRESP),
-	.RLAST(RLAST),
-	.RVALID(RVALID),
-	.RREADY(RREADY),
-	
-	//memory port
-	.CS(CS),
-	.OE(OE),
 	.WEB(WEB),
-	.A(A),
+	.A(A_write),
 	.DI(DI),
-	.DO(DO)
-);
+	.slave_id(8'b00000001)
+	);
+	always_comb
+	begin
+	
+		A=AWVALID?A_write:A_read;
+	end
   SRAM i_SRAM (
     .A0   (A[0]  ),
     .A1   (A[1]  ),
@@ -185,7 +192,7 @@ slave_dm slave_1(
     .WEB2 (WEB[2]),
     .WEB3 (WEB[3]),
     .OE   (OE    ),
-    .CS   (CS    )
+    .CS   (1'b1  )
   );
 
 endmodule
