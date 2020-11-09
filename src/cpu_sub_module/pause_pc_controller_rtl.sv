@@ -18,6 +18,6 @@
   
   always_comb
   begin
-	pc_data=(instruction_stall||bus_stall)?pc:pc;
+	pc_data=(instruction_stall||bus_stall)?past_pc:pc;
   end
   endmodule

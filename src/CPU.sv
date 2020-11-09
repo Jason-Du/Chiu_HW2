@@ -39,7 +39,8 @@ module CPU(
 			dm_addr,
 			dm_datain,
 			dm_write_mem,
-			dm_read_mem
+			dm_read_mem,
+			instruction_stall
 			
 				);
  
@@ -66,6 +67,7 @@ output logic [         31:0] dm_addr;
 output logic [DATA_SIZE-1:0] dm_datain;
 output logic                 dm_write_mem;
 output logic                 dm_read_mem;
+output logic                 instruction_stall;
 //output logic                 im_write_mem;
 output logic                 im_read_mem;
 
@@ -113,7 +115,7 @@ logic                        id_exe_rst_data;
 logic                        if_id_rst_data;
 logic                        pc_jump_control;
 logic                        pc_stall;
-logic                        instruction_stall;
+//logic                        instruction_stall;
 logic        [        142:0] stage3_register_in;
 logic        [        142:0] stage3_register_out;
 logic        [DATA_SIZE-1:0] reminder;
@@ -156,13 +158,12 @@ begin:pc_id
 	if (rst==1'b1)
 	begin
 		pc_register_out<=32'd0;
-		im_read_mem=1'b1;
+		im_read_mem<=1'b1;
 	end
 	else
 	begin
-		
 		pc_register_out<=pc_data;
-		im_read_mem=1'b1;
+		im_read_mem<=1'b1;
 	end
 end
 always_comb
@@ -175,7 +176,7 @@ begin:if_comb
 	//im_web=4'b1111;
 	//im_datain=32'd0;
 	im_dataout_data=rst?32'd0:im_dataout;
-	stage1_register_in=(instruction_stall||bus_stall)?stage1_register_out:{im_dataout_data,
+	stage1_register_in=(bus_stall||instruction_stall)?stage1_register_out:{im_dataout_data,
 						pc_register_out
 						};
 end
@@ -219,7 +220,7 @@ begin:if_id
 end
 always_comb
 begin:id_comb
-	stage2_register_in=bus_stall?stage2_register_out:{
+	stage2_register_in=(bus_stall||instruction_stall)?stage2_register_out:{
 						wb_control,
 						enable_jump,
 						write_reg,
@@ -329,7 +330,7 @@ begin:id_exe
 end
 always_comb
 begin:exe_comb
-	stage3_register_in=bus_stall?stage3_register_out:{
+	stage3_register_in=(bus_stall)?stage3_register_out:{
 					stage2_register_out[157],
 					stage2_register_out[156],
 					stage2_register_out[155],
@@ -399,7 +400,8 @@ load_hazard lhd(
 				
 				.pc_stall(pc_stall),
 				.instruction_stall(instruction_stall),
-				.pc_jump_confirm(stage3_register_out[133])
+				.pc_jump_confirm(stage3_register_out[133]),
+				.bus_stall(1'b0)
 				);
 forwarding_unit fwu(
 					.exe_mem_write_reg(stage3_register_out[140]),
@@ -444,7 +446,7 @@ begin:mem_comb
 	dm_write_mem=stage3_register_out[139];
 	dm_addr={16'h0001,2'b00,quotient[13:0]};
 	dm_web=(stage3_register_out[139])?web_data:4'b1111;
-	stage4_register_in=bus_stall?stage4_register_out:{
+	stage4_register_in=(bus_stall)?stage4_register_out:{
 					stage3_register_out[140],
 					stage3_register_out[132:128],
 					wb_data

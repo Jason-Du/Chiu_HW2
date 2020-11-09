@@ -1,6 +1,5 @@
 `timescale 1ns/10ps
-`include "slave_write_rtl.sv"
-`include "slave_read_rtl.sv"
+`include "slave_im.sv"
 `include "../include/AXI_define.svh"
 module SRAM_wrapper_im(
   	input ACLK,
@@ -44,49 +43,25 @@ module SRAM_wrapper_im(
 	input RREADY
 );
 
+wire CS;
+wire OE;
+wire [3:0] WEB;
+wire [13:0] A;
+wire [31:0] DI;
+wire [31:0] DO;
 
-logic 	     OE;
-logic [ 3:0] WEB;
-logic [13:0] A;
-logic [31:0] DI;
-logic [31:0] DO;
-logic [13:0] A_write;
-logic [13:0] A_read;
-logic [13:0] A_register_out;
-logic        cs;
-logic        ns;
+slave_im slave_0(
 
-slave_read im_read_slave(
-	.clk(ACLK),
-	.rst(ARESETn),
-	.ARID(ARID),
-	.ARADDR(ARADDR),
-	.ARLEN(ARLEN),
-	.ARSIZE(ARSIZE),
-	.ARBURST(ARBURST),
-	.ARVALID(ARVALID),
-	.ARREADY(ARREADY),
-	//READ DATA
-	.RID(RID),
-	.RDATA(RDATA),
-	.RRESP(RRESP),
-	.RLAST(RLAST),
-	.RVALID(RVALID),
-	.RREADY(RREADY),
-	.OE(OE),
-	.A(A_read),
-	.DO(DO),
-	.slave_id(8'b00000000)
-);
-slave_write im_write_slave(
+	.ACLK(ACLK),
+	.ARESETn(ARESETn),
 
-	.clk(ACLK),
-	.rst(ARESETn),
+	//SLAVE INTERFACE FOR MASTERS
+	//WRITE ADDRESS
 	.AWID(AWID),
 	.AWADDR(AWADDR),
-	.AWLEN(AWLEN),
-	.AWSIZE(AWSIZE),
-	.AWBURST(AWBURST),
+	.AWLEN(4'b0000),
+	.AWSIZE(3'b010),
+	.AWBURST(2'b01),
 	.AWVALID(AWVALID),
 	.AWREADY(AWREADY),
 	//WRITE DATA
@@ -100,42 +75,31 @@ slave_write im_write_slave(
 	.BRESP(BRESP),
 	.BVALID(BVALID),
 	.BREADY(BREADY),
+
+	//READ ADDRESS
+	.ARID(ARID),
+	.ARADDR(ARADDR),
+	.ARLEN(4'b0000),
+	.ARSIZE(3'b010),
+	.ARBURST(2'b01),
+	.ARVALID(ARVALID),
+	.ARREADY(ARREADY),
+	//READ DATA
+	.RID(RID),
+	.RDATA(RDATA),
+	.RRESP(RRESP),
+	.RLAST(RLAST),
+	.RVALID(RVALID),
+	.RREADY(RREADY),
+	
+	//memory port
+	.CS(CS),
+	.OE(OE),
 	.WEB(WEB),
-	.A(A_write),
+	.A(A),
 	.DI(DI),
-	.slave_id(8'b00000000)
-	);
-always_ff@(posedge ACLK or negedge ARESETn)
-begin
-	if(ARESETn==1'b0)
-		cs<=1'b0;
-	else
-	begin
-		cs<=ns;
-	end
-end
-always_ff@(posedge ACLK or negedge ARESETn)
-begin
-	if(ARESETn==1'b0)
-		A_register_out<=14'd0;
-	else
-	begin
-		A_register_out<=A;
-	end
-end
-always_comb
-begin
-	if(cs==1'b0)
-	begin
-		A=AWVALID?A_write:A_read;
-		ns=(AWVALID||ARVALID)?1'b0:1'b1;
-	end
-	else
-	begin
-		A=A_register_out;
-		ns=((BVALID&&BREADY)||(RVALID&&RREADY))?1'b0:1'b1;
-	end
-end
+	.DO(DO)
+);
   SRAM i_SRAM (
     .A0   (A[0]  ),
     .A1   (A[1]  ),
@@ -221,7 +185,7 @@ end
     .WEB2 (WEB[2]),
     .WEB3 (WEB[3]),
     .OE   (OE    ),
-    .CS   (1'b1  )
+    .CS   (CS    )
   );
 
 endmodule

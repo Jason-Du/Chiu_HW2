@@ -169,6 +169,7 @@ module CPU_wrapper(
 	//logic                             im_write_pause;
 	logic                             im_write_signal;
 	logic        [               3:0] dm_web;
+	logic                             instruction_stall;
 	//logic        [              31:0] im_write_data;
 	//logic        [               3:0] im_web;
 	always_comb
@@ -184,6 +185,7 @@ module CPU_wrapper(
 	.im_read_pause(im_read_pause),
 	.read_data(dm_read_data),
 	.read_pause_cpu(dm_read_pause),
+	.instruction_stall(1'b0),
 
 	
 	
@@ -217,7 +219,7 @@ module CPU_wrapper(
 	.im_read_pause(1'b0),
 	.read_data(im_read_data),
 	.read_pause_cpu(im_read_pause),
-
+	.instruction_stall(instruction_stall),
 	
 	
 	//READ ADDRESS0
@@ -282,7 +284,7 @@ CPU CPU1(
 			.im_dataout(im_read_data),
 			.dm_dataout(dm_read_data),
 			.bus_stall(cpu_pause),
-
+			.instruction_stall(instruction_stall),
 
 //			im_cs(),
 //			im_oe(),
