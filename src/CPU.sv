@@ -180,7 +180,7 @@ begin:if_comb
 end
 if_id_rst_controller ifidrst(
 					.local_rst(stage3_register_out[134]),
-					.global_rst(rst),
+					//.global_rst(rst),
 					.pc_jump_control(stage3_register_out[133]),
 					.enable_jump(stage3_register_out[141]),
 					.bus_stall(bus_stall),
@@ -307,7 +307,7 @@ imm_extended iex(
 	//modify
 id_exe_rst_controller idexerst(
 				.local_rst(stage3_register_out[135]),
-				.global_rst(rst),
+				//.global_rst(rst),
 				.pc_jump_control(stage3_register_out[133]),
 				.pc_stall(pc_stall),
 				.enable_jump(stage3_register_out[141]),
@@ -417,7 +417,7 @@ forwarding_unit fwu(
 	//modify
 exe_mem_rst_controller exememrst(
 					.local_rst(stage3_register_out[134]),
-					.global_rst(rst),
+					//.global_rst(rst),
 					.pc_jump_control(stage3_register_out[133]),
 					.enable_jump(stage3_register_out[141]),
 					.bus_stall(bus_stall),					
@@ -442,7 +442,7 @@ begin:mem_comb
 	//dm_cs=1'b1;
 	dm_read_mem=stage3_register_out[138];
 	dm_write_mem=stage3_register_out[139];
-	dm_addr=quotient;
+	dm_addr={16'h0001,2'b00,quotient};
 	dm_web=(stage3_register_out[139])?web_data:4'b1111;
 	stage4_register_in=(bus_stall)?stage4_register_out:{
 					stage3_register_out[140],
