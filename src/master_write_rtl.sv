@@ -222,7 +222,7 @@ module master_write#(
 				WSTRB_M=WSTRB_M_register_out;
 				WLAST_M=1'b1;
 					//WRITE RESPONSE1
-				BREADY_M=1'b0;
+				BREADY_M=1'b1;
 				//BREADY_M=BVALID_M?1'b1:1'b0;
 				cpu_write_pause=1'b1;					
 			end				
@@ -238,6 +238,7 @@ module master_write#(
 				begin
 					ns=3'b011;
 				end
+				BREADY_M=1'b1;
 				AWID_M=AWID_M_register_out;
 				AWADDR_M=AWADDR_M_register_out;
 				
@@ -248,7 +249,7 @@ module master_write#(
 				WLAST_M=1'b0;
 				WVALID_M=1'b0;
 					//WRITE RESPONSE1
-				BREADY_M=1'b0;
+				
 				cpu_write_pause=1'b1;	
 			end
 			3'b100:
@@ -264,7 +265,7 @@ module master_write#(
 				WLAST_M=1'b0;
 				WVALID_M=1'b0;
 					//WRITE RESPONSE1
-				BREADY_M=1'b1;
+				BREADY_M=1'b0;
 				cpu_write_pause=(im_read_pause==1'b1)?1'b1:1'b0;					
 			end
 			default:
