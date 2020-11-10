@@ -6,7 +6,7 @@ module id_exe_rst_controller(
 						pc_jump_control,
 						pc_stall,
 						enable_jump,
-						bus_stall,						
+						//bus_stall,						
 						rst_data
 						);
 output logic rst_data;
@@ -16,7 +16,7 @@ input        local_rst;
 //input        global_rst;
 input        pc_stall;
 input        enable_jump;
-input  logic bus_stall;
+//input  logic bus_stall;
 
 always_comb
 begin

@@ -153,7 +153,7 @@ pc_controller ptl(.pc(pc_register_out),
 				  .pc_data(pc_data)
 					);
 
-always_ff@(posedge clk or negedge rst)
+always_ff@(posedge clk or posedge rst)
 begin:pc_id
 	if (rst)
 	begin
@@ -184,11 +184,11 @@ if_id_rst_controller ifidrst(
 					//.global_rst(rst),
 					.pc_jump_control(stage3_register_out[133]),
 					.enable_jump(stage3_register_out[141]),
-					.bus_stall(bus_stall),
+					//.bus_stall(bus_stall),
 					.rst_data(if_id_rst)
 					);
 
-always_ff@(posedge clk or negedge rst)
+always_ff@(posedge clk or posedge rst)
 begin:if_id
 	if(rst==1'b1)
 	begin
@@ -294,11 +294,11 @@ id_exe_rst_controller idexerst(
 				.pc_jump_control(stage3_register_out[133]),
 				.pc_stall(pc_stall),
 				.enable_jump(stage3_register_out[141]),
-				.bus_stall(bus_stall),				
+				//.bus_stall(bus_stall),				
 				.rst_data(id_exe_rst)
 				);
 
-always_ff@(posedge clk or negedge rst)
+always_ff@(posedge clk or posedge rst)
 begin:id_exe
 	if(rst==1'b1)
 	begin
@@ -403,11 +403,11 @@ exe_mem_rst_controller exememrst(
 					//.global_rst(rst),
 					.pc_jump_control(stage3_register_out[133]),
 					.enable_jump(stage3_register_out[141]),
-					.bus_stall(bus_stall),					
+					//.bus_stall(bus_stall),					
 					.rst_data(exe_mem_rst)
 					);
 
-always_ff@(posedge clk or negedge rst)
+always_ff@(posedge clk or posedge rst)
 begin:exe_mem
 	if(rst==1'b1)
 	begin
@@ -467,7 +467,7 @@ wb_controller wbc(
 
 
 
-always_ff@(posedge clk or negedge rst)
+always_ff@(posedge clk or posedge rst)
 begin
 	if(rst==1'b1)
 	begin
