@@ -93,12 +93,6 @@ end
 
 always_comb
 begin:read_register_data
-	if(rst)
-	begin
-		rs1_data=32'd0;
-		rs2_data=32'd0;	
-	end
-	else
 	begin
 		rs1_data=mreg[rs1_addr];
 		rs2_data=mreg[rs2_addr];		
