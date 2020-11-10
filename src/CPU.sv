@@ -176,7 +176,8 @@ begin:if_comb
 	//im_web=4'b1111;
 	//im_datain=32'd0;
 	im_dataout_data=rst?32'd0:im_dataout;
-	stage1_register_in=if_id_rst?64'd0:((bus_stall||instruction_stall)?stage1_register_out:{im_dataout_data,pc_register_out});
+	//stage1_register_in=if_id_rst?64'd0:((bus_stall||instruction_stall)?stage1_register_out:{im_dataout_data,pc_register_out});
+	stage1_register_in=(bus_stall||instruction_stall)?stage1_register_out:(if_id_rst?64'd0:{im_dataout_data,pc_register_out});
 end
 if_id_rst_controller ifidrst(
 					.local_rst(stage3_register_out[134]),
@@ -186,25 +187,7 @@ if_id_rst_controller ifidrst(
 					.bus_stall(bus_stall),
 					.rst_data(if_id_rst)
 					);
-					//modify
-					/*
-pause_instruction_controller pic(
-						.instruction_stall(instruction_stall),
-						.instruction(im_dataout),
-						.past_instruction(stage1_register_out[63:32]),
-						.bus_stall(bus_stall),
-						
-						.instruction_data(instruction)
-						);
-					//modify
-pause_pc_controller ppc(
-						.instruction_stall(instruction_stall),
-						.pc(pc_register_out),
-						.past_pc(stage1_register_out[31:0]),
-						.bus_stall(bus_stall),								
-						.pc_data(pc_stage1_register)
-									);
-									*/
+
 always_ff@(posedge clk or negedge rst)
 begin:if_id
 	if(rst==1'b1)
@@ -218,7 +201,7 @@ begin:if_id
 end
 always_comb
 begin:id_comb
-	stage2_register_in=id_exe_rst?158'd0:((bus_stall)?stage2_register_out:{
+	stage2_register_in=(bus_stall)?stage2_register_out:(id_exe_rst?158'd0:{
 						wb_control,
 						enable_jump,
 						write_reg,
@@ -328,7 +311,7 @@ begin:id_exe
 end
 always_comb
 begin:exe_comb
-	stage3_register_in=exe_mem_rst?143'd0:((bus_stall)?stage3_register_out:{
+	stage3_register_in=(bus_stall)?stage3_register_out:(exe_mem_rst?143'd0:{
 					stage2_register_out[157],
 					stage2_register_out[156],
 					stage2_register_out[155],
