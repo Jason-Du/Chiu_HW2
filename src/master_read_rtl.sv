@@ -80,6 +80,7 @@ module master_read #(
 	logic        [               2:0] cs;
 	logic        [               2:0] ns;
 	logic        [              31:0] read_data_register_out;
+	logic        [              31:0] ARADDR_M_register_out;
 	always_ff@(posedge clk or negedge rst)
 	begin
 		if(!rst)
@@ -96,15 +97,17 @@ module master_read #(
 		if(!rst)
 		begin
 			read_data_register_out<=32'd0;
+			ARADDR_M_register_out<=32'd0;
 		end
 		else
 		begin
 			read_data_register_out<=read_data;
+			ARADDR_M_register_out<=ARADDR_M;
 		end
 	end
 	always_comb
 	begin
-		case(cs)
+		case(cs)    
 			3'b000:
 			begin
 				if(cpu_read_signal)
@@ -137,7 +140,7 @@ module master_read #(
 					ns=3'b001;
 				end
 				ARID_M   =slaveid;
-				ARADDR_M =address;
+				ARADDR_M =ARADDR_M_register_out;
 				ARVALID_M=1'b1;
 				RREADY_M =1'b0;
 				read_pause_cpu=1'b1;
@@ -154,7 +157,7 @@ module master_read #(
 					ns=3'b010;
 				end
 				ARID_M   =slaveid;
-				ARADDR_M =address;
+				ARADDR_M =ARADDR_M_register_out;
 				ARVALID_M=1'b0;
 				RREADY_M =1'b1;
 				read_data= (RRESP_M==2'b00 && RVALID_M==1'b1)?RDATA_M:32'd0;
@@ -164,7 +167,7 @@ module master_read #(
 			3'b011:
 			begin
 				ARID_M   =slaveid;
-				ARADDR_M =address;
+				ARADDR_M =ARADDR_M_register_out;
 				ARVALID_M=1'b0;
 				RREADY_M =1'b1;
 				read_data= read_data_register_out;
