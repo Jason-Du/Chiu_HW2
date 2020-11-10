@@ -65,7 +65,7 @@ module slave_dm(
 	output logic CS,
 	output logic OE,
 	output logic [3:0] WEB,
-	output logic [13:0] A,
+	output logic [15:2] A,
 	output logic [31:0] DI,
 	input [31:0] DO
 );
@@ -132,7 +132,7 @@ always_ff@(posedge ACLK or negedge ARESETn)begin
 			CS<=1'b1;
 			OE<=(r_select==1'b1)?1'b1:1'b0;
 			WEB<=(w_select==1'b1)?WSTRB:4'b1111;
-			A<=addr[13:0];
+			A<=addr[15:2];
 				
 			DI<=WDATA;
 			one_clock<=one_clock+2'b01;

@@ -170,7 +170,8 @@ always_comb
 begin:if_comb
 	next_pc=pc_register_out+32'd4;
 	//unsigned'(mem_addr)>>2
-	im_addr=unsigned'(pc_register_out)>>2;
+	//im_addr=unsigned'(pc_register_out)>>2;
+	im_addr=pc_register_out;
 	//im_cs=1'b1;
 	//im_oe=1'b1;
 	//im_web=4'b1111;
@@ -425,7 +426,8 @@ begin:mem_comb
 	//dm_cs=1'b1;
 	dm_read_mem=stage3_register_out[138];
 	dm_write_mem=stage3_register_out[139];
-	dm_addr={16'h0001,2'b00,quotient[13:0]};
+	//dm_addr={16'h0001,2'b00,quotient[13:0]};
+	dm_addr=stage3_register_out[127:96];
 	dm_web=(stage3_register_out[139])?web_data:4'b1111;
 	stage4_register_in=(bus_stall)?stage4_register_out:{
 					stage3_register_out[140],
