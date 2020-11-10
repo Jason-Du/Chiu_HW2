@@ -81,11 +81,13 @@ module master_read #(
 	logic        [               2:0] ns;
 	logic        [              31:0] read_data_register_out;
 	logic        [              31:0] ARADDR_M_register_out;
+	logic                             ARREADY_M_register_out;
+	logic                             RLAST_M_register_out;
 	always_ff@(posedge clk or negedge rst)
 	begin
 		if(!rst)
 		begin
-			cs<=3'b00;
+			cs<=3'b000;
 		end
 		else
 		begin
@@ -98,16 +100,20 @@ module master_read #(
 		begin
 			read_data_register_out<=32'd0;
 			ARADDR_M_register_out<=32'd0;
+			ARREADY_M_register_out<=1'b0;
+			RLAST_M_register_out<=1'b0;
 		end
 		else
 		begin
 			read_data_register_out<=read_data;
 			ARADDR_M_register_out<=ARADDR_M;
+			ARREADY_M_register_out<=ARREADY_M;
+			RLAST_M_register_out<=RLAST_M;
 		end
 	end
 	always_comb
 	begin
-		case(cs)    
+		case(cs)
 			3'b000:
 			begin
 				if(cpu_read_signal)
@@ -131,7 +137,7 @@ module master_read #(
 			end
 			3'b001:
 			begin
-				if(ARREADY_M==1'b1)
+				if(ARREADY_M_register_out==1'b1)
 				begin
 					ns=3'b010;
 				end
@@ -139,6 +145,18 @@ module master_read #(
 				begin
 					ns=3'b001;
 				end
+				ARVALID_M=1'b1;
+				ARID_M   =slaveid;
+				ARADDR_M =ARADDR_M_register_out;
+				RREADY_M =1'b0;
+				read_pause_cpu=1'b1;
+				read_data=32'd0;
+			end
+			
+			3'b010:
+			begin
+				ns=3'b011;
+				RREADY_M =1'b1;
 				ARID_M   =slaveid;
 				ARADDR_M =ARADDR_M_register_out;
 				ARVALID_M=1'b1;
@@ -146,15 +164,15 @@ module master_read #(
 				read_pause_cpu=1'b1;
 				read_data=32'd0;
 			end
-			3'b010:
+			3'b011:
 			begin
 				if (RLAST_M==1'b1)
 				begin
-					ns=3'b011;
+					ns=3'b100;
 				end
 				else
 				begin
-					ns=3'b010;
+					ns=3'b011;
 				end
 				ARID_M   =slaveid;
 				ARADDR_M =ARADDR_M_register_out;
@@ -164,15 +182,15 @@ module master_read #(
 				read_pause_cpu=1'b1;
 			end
 			//modify state
-			3'b011:
+			3'b100:
 			begin
 				ARID_M   =slaveid;
 				ARADDR_M =ARADDR_M_register_out;
 				ARVALID_M=1'b0;
-				RREADY_M =1'b1;
-				read_data= read_data_register_out;
+				RREADY_M =1'b0;
+				read_data=read_data_register_out;
 				read_pause_cpu=1'b0;
-				ns=	(im_read_pause==1'b1)?3'b11:3'b000;				
+				ns=	(im_read_pause==1'b1)?3'b100:3'b000;				
 			end
 			
 			default:
@@ -195,4 +213,4 @@ module master_read #(
 		ARBURST_M=2'd1;
 	end
 	
-	endmodule
+endmodule
