@@ -205,6 +205,7 @@ if(flag==1'b1)begin
 				ns=((WLAST==1'b1)&&(WVALID==1'b1))?2'b11:2'b10;			
 			end
 			2'b11:begin
+				BRESP=(addr<32'h0001ffff)?2'b00:2'b11;
 				//BRESP=((ID==8'b00000001)&&(addr<32'h0001ffff))?2'b00:2'b11;
 				AWREADY=1'b0;
 				WREADY=1'b0;
