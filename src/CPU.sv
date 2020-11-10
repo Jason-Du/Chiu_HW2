@@ -442,7 +442,7 @@ begin:mem_comb
 	//dm_cs=1'b1;
 	dm_read_mem=stage3_register_out[138];
 	dm_write_mem=stage3_register_out[139];
-	dm_addr={16'h0001,2'b00,quotient};
+	dm_addr={16'h0001,2'b00,quotient[13:0]};
 	dm_web=(stage3_register_out[139])?web_data:4'b1111;
 	stage4_register_in=(bus_stall)?stage4_register_out:{
 					stage3_register_out[140],
