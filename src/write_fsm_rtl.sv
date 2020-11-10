@@ -191,10 +191,6 @@ module write_fsm(
 	end
 	always_ff@(posedge clk or negedge rst)
 	begin
-		
-	end
-	always_ff@(posedge clk or negedge rst)
-	begin
 		if(!rst)
 		begin
 			situation_decode_register_out<=1'b0;

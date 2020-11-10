@@ -284,7 +284,6 @@ CPU CPU1(
 			.im_dataout(im_read_data),
 			.dm_dataout(dm_read_data),
 			.bus_stall(cpu_pause),
-			.instruction_stall(instruction_stall),
 
 //			im_cs(),
 //			im_oe(),

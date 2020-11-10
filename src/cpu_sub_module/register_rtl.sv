@@ -94,8 +94,16 @@ end
 always_comb
 begin:read_register_data
 	begin
-		rs1_data=mreg[rs1_addr];
-		rs2_data=mreg[rs2_addr];		
+		if(read_reg)
+		begin
+			rs1_data=mreg[rs1_addr];
+			rs2_data=mreg[rs2_addr];	
+		end
+		else
+		begin
+			rs1_data=mreg[rs1_addr];
+			rs2_data=mreg[rs2_addr];
+		end
 	end
 end
 

@@ -40,7 +40,6 @@ module CPU(
 			dm_datain,
 			dm_write_mem,
 			dm_read_mem,
-			instruction_stall
 			
 				);
  
@@ -67,7 +66,7 @@ output logic [         31:0] dm_addr;
 output logic [DATA_SIZE-1:0] dm_datain;
 output logic                 dm_write_mem;
 output logic                 dm_read_mem;
-output logic                 instruction_stall;
+
 //output logic                 im_write_mem;
 output logic                 im_read_mem;
 
@@ -131,8 +130,10 @@ logic                        rs2_exe_hazard;
 logic                        rs2_mem_hazard;
 logic                        exe_mem_rst;
 logic        [DATA_SIZE-1:0] pc_stage1_register;
+logic                 instruction_stall;
 //logic        [         13:0] im_addr0;
 logic        [         31:0] im_dataout_data;
+logic                        write_reg_bus;
 
 //DEBUG
 
@@ -220,6 +221,7 @@ begin:id_comb
 						imm_data,
 						stage1_register_out[31:0]
 						});	
+	write_reg_bus=bus_stall?1'b0:stage3_register_out[140];
 end
 decoder dc(
 			.instruction(stage1_register_out[63:32]),
@@ -262,7 +264,9 @@ register rigt(
 			.clk(clk),
 			.rst(rst),
 			.read_reg(read_reg),
-			.write_reg(stage3_register_out[140]),
+			
+			//.write_reg(stage3_register_out[140]),
+			.write_reg(write_reg_bus),
 			.write_data(wb_data),
 			//.write_reg(stage4_register_out[37]),
 			//.write_data(stage4_register_out[31:0]),
