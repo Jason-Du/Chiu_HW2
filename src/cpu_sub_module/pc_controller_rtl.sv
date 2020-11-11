@@ -27,13 +27,13 @@
   
   always_comb
   begin
-	if(pc_stall==1'b1||bus_stall==1'b1)
+	if(pc_stall==1'b1)
 	begin
 		pc_data=pc;
 	end
 	else
 	begin
-		pc_data=enable_jump?(pc_jump_control?pc_jump_address:next_pc):next_pc;
+		pc_data=bus_stall?pc:(enable_jump?(pc_jump_control?pc_jump_address:next_pc):next_pc);
 	end
   end
   

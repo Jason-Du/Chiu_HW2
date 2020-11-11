@@ -1,4 +1,4 @@
-	`include "../../include/AXI_define.svh"
+`include "../../include/AXI_define.svh"
 module write_read_arbitor(
 							  clk,
 							  rst,
@@ -35,7 +35,7 @@ module write_read_arbitor(
 
 	always_ff@(posedge clk or negedge rst)
 	begin
-		if(rst==1'b0)
+		if(!rst)
 		begin
 			cs<=1'b0;
 		end
@@ -46,7 +46,7 @@ module write_read_arbitor(
 	end
 	always_ff@(posedge clk or negedge rst)
 	begin
-		if(rst==1'b0)
+		if(!rst)
 		begin
 			ARVALID_M_0stage1_register_out<=1'b0;
 			ARVALID_M_1stage1_register_out<=1'b0;

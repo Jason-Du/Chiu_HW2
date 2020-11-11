@@ -248,7 +248,7 @@ module read_fsm(
 	end
 	always_ff@(posedge clk or negedge rst)
 	begin
-		if(rst==1'b0)
+		if(!rst)
 		begin
 			cs<=1'b0;
 		end
@@ -259,7 +259,7 @@ module read_fsm(
 	end
 	always_ff@(posedge clk or negedge rst)
 	begin
-		if(rst==1'b0)
+		if(!rst)
 		begin
 			situation_decode_register_out<=2'b00;
 			slave_sel_register_out<=16'd0;
@@ -276,7 +276,7 @@ begin
 		2'b00:
 		begin
 			//slave_sel =16'd0;
-			RID_M0    =3'd0;
+			RID_M0    =4'd0;
 			RDATA_M0  =32'd0;
 			RRESP_M0  =2'd0;
 			RLAST_M0  =1'b0;
@@ -312,7 +312,7 @@ begin
 		end
 		2'b01:
 		begin
-			RID_M0    =3'd0;
+			RID_M0    =4'd0;
 			RDATA_M0  =32'd0;
 			RRESP_M0  =2'd0;
 			RLAST_M0  =1'b0;
@@ -353,7 +353,7 @@ begin
 		end
 		2'b10:
 		begin
-			RID_M1    =3'd0;
+			RID_M1    =4'd0;
 			RDATA_M1  =32'd0;
 			RRESP_M1  =2'd0;
 			RLAST_M1  =1'b0;
@@ -397,7 +397,7 @@ begin
 		2'b11:
 		begin
 			//slave_sel =16'd0;
-			RID_M0    =3'd0;
+			RID_M0    =4'd0;
 			RDATA_M0  =32'd0;
 			RRESP_M0  =2'd0;
 			RLAST_M0  =1'b0;

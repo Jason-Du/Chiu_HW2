@@ -159,16 +159,15 @@ begin:pc_id
 	if (rst)
 	begin
 		pc_register_out<=32'd0;
-		im_read_mem<=1'b1;
 	end
 	else
 	begin
 		pc_register_out<=pc_data;
-		im_read_mem<=1'b1;
 	end
 end
 always_comb
 begin:if_comb
+	im_read_mem=(instruction_stall)?1'b0:1'b1;
 	next_pc=pc_register_out+32'd4;
 	//unsigned'(mem_addr)>>2
 	//im_addr=unsigned'(pc_register_out)>>2;

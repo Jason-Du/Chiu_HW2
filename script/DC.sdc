@@ -1,4 +1,4 @@
-create_clock -name clk -period 8 [get_ports clk]
+create_clock -name clk -period 20 [get_ports clk]
 set_dont_touch_network      [all_clocks]
 set_fix_hold                [all_clocks]
 set_clock_uncertainty  0.1  [all_clocks]
