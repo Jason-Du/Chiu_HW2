@@ -1,0 +1,98 @@
+****************************************
+Report : power
+        -analysis_effort low
+Design : top
+Version: O-2018.06
+Date   : Tue Nov 10 21:35:25 2020
+****************************************
+
+
+Library(s) Used:
+
+    fsa0m_a_generic_core_ss1p62v125c (File: /usr/cad/CBDK/CBDK018_UMC_Faraday_v1.0/orig_lib/fsa0m_a/2009Q2v2.0/GENERIC_CORE/FrontEnd/synopsys/fsa0m_a_generic_core_ss1p62v125c.db)
+    SRAM_WC (File: /home/user2/vsd20/vsd2055/N26094883/sim/SRAM/SRAM_WC.db)
+
+
+Operating Conditions: BCCOM   Library: fsa0m_a_generic_core_ff1p98vm40c
+Wire Load Model Mode: enclosed
+
+Design        Wire Load Model            Library
+------------------------------------------------
+top                    enG5000K          fsa0m_a_t33_generic_io_ff1p98vm40c
+CPU_wrapper            enG30K            fsa0m_a_generic_core_ss1p62v125c
+AXI                    enG5K             fsa0m_a_generic_core_ss1p62v125c
+SRAM_wrapper_im        enG500K           fsa0m_a_generic_core_ss1p62v125c
+SRAM_wrapper_dm        enG500K           fsa0m_a_generic_core_ss1p62v125c
+CPU                    enG30K            fsa0m_a_generic_core_ss1p62v125c
+write_read_arbitor     enG5K             fsa0m_a_generic_core_ss1p62v125c
+read_fsm               enG5K             fsa0m_a_generic_core_ss1p62v125c
+write_fsm              enG5K             fsa0m_a_generic_core_ss1p62v125c
+slave_im               enG5K             fsa0m_a_generic_core_ss1p62v125c
+slave_dm               enG5K             fsa0m_a_generic_core_ss1p62v125c
+pc_controller          enG5K             fsa0m_a_generic_core_ss1p62v125c
+if_id_rst_controller   enG5K             fsa0m_a_generic_core_ss1p62v125c
+decoder                enG5K             fsa0m_a_generic_core_ss1p62v125c
+control                enG5K             fsa0m_a_generic_core_ss1p62v125c
+register               enG30K            fsa0m_a_generic_core_ss1p62v125c
+imm_extended           enG5K             fsa0m_a_generic_core_ss1p62v125c
+id_exe_rst_controller  enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_in_selector        enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_rd                 enG10K            fsa0m_a_generic_core_ss1p62v125c
+alu_addr               enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_pc                 enG5K             fsa0m_a_generic_core_ss1p62v125c
+load_hazard            enG5K             fsa0m_a_generic_core_ss1p62v125c
+forwarding_unit        enG5K             fsa0m_a_generic_core_ss1p62v125c
+exe_mem_rst_controller enG5K             fsa0m_a_generic_core_ss1p62v125c
+divider4               enG5K             fsa0m_a_generic_core_ss1p62v125c
+low_byte_control_write_data
+                       enG5K             fsa0m_a_generic_core_ss1p62v125c
+low_byte_control_read_data
+                       enG5K             fsa0m_a_generic_core_ss1p62v125c
+wb_controller          enG5K             fsa0m_a_generic_core_ss1p62v125c
+CPU_DW01_add_0         enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_pc_DW01_add_0      enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_pc_DW01_add_1      enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_pc_DW01_add_2      enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_pc_DW01_cmp2_0     enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_pc_DW01_cmp6_0     enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_addr_DW01_add_0    enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_rd_DW01_add_0      enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_rd_DW_cmp_0        enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_rd_DW_cmp_1        enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_rd_DW01_add_1      enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_rd_DW_cmp_2        enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_rd_DW_cmp_3        enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_rd_DW01_sub_0      enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_rd_DW01_add_2      enG5K             fsa0m_a_generic_core_ss1p62v125c
+alu_rd_DW01_add_3      enG5K             fsa0m_a_generic_core_ss1p62v125c
+
+
+Global Operating Voltage = 1.98 
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000pf
+    Time Units = 1ns
+    Dynamic Power Units = 1mW    (derived from V,C,T units)
+    Leakage Power Units = 1pW
+
+
+  Cell Internal Power  =  16.1074 mW   (10%)
+  Net Switching Power  = 148.6056 mW   (90%)
+                         ---------
+Total Dynamic Power    = 164.7130 mW  (100%)
+
+Cell Leakage Power     =   1.2315 mW
+
+
+                 Internal         Switching           Leakage            Total
+Power Group      Power            Power               Power              Power   (   %    )  Attrs
+--------------------------------------------------------------------------------------------------
+io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+memory            12.0242        3.2105e-02        1.2171e+09           13.2734  (   8.00%)
+black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
+clock_network      0.1126          148.3767        2.5688e+06          148.4925  (  89.48%)
+register           3.9335        7.6942e-02        6.0900e+06            4.0165  (   2.42%)
+sequential         0.0000            0.0000            0.0000            0.0000  (   0.00%)
+combinational  3.7068e-02            0.1186        5.6863e+06            0.1613  (   0.10%)
+--------------------------------------------------------------------------------------------------
+Total             16.1074 mW       148.6044 mW     1.2315e+09 pW       165.9438 mW

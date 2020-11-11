@@ -1,0 +1,108 @@
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+        -sort_by group
+Design : top
+Version: O-2018.06
+Date   : Tue Nov 10 21:23:54 2020
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: BCCOM   Library: fsa0m_a_generic_core_ff1p98vm40c
+Wire Load Model Mode: enclosed
+
+  Startpoint: cpu/CPU1/stage3_register_out_reg[130]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: cpu/CPU1/stage3_register_out_reg[95]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  top                enG5000K              fsa0m_a_t33_generic_io_ff1p98vm40c
+  CPU                enG30K                fsa0m_a_generic_core_ss1p62v125c
+  forwarding_unit    enG5K                 fsa0m_a_generic_core_ss1p62v125c
+  alu_in_selector    enG5K                 fsa0m_a_generic_core_ss1p62v125c
+  alu_rd             enG10K                fsa0m_a_generic_core_ss1p62v125c
+  alu_rd_DW01_sub_0  enG5K                 fsa0m_a_generic_core_ss1p62v125c
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                  10.00      10.00
+  clock network delay (ideal)                             0.00      10.00
+  cpu/CPU1/stage3_register_out_reg[130]/CK (QDFFRBN)      0.00 #    10.00 r
+  cpu/CPU1/stage3_register_out_reg[130]/Q (QDFFRBN)       0.30      10.30 f
+  cpu/CPU1/fwu/exe_mem_rd_addr[2] (forwarding_unit)       0.00      10.30 f
+  cpu/CPU1/fwu/U4/O (NR3)                                 0.11      10.40 r
+  cpu/CPU1/fwu/U3/O (AN3B2S)                              0.13      10.54 r
+  cpu/CPU1/fwu/U24/O (AN4B1S)                             0.07      10.60 f
+  cpu/CPU1/fwu/U15/O (AN4B1S)                             0.15      10.75 f
+  cpu/CPU1/fwu/rs2_exe_hazard (forwarding_unit)           0.00      10.75 f
+  cpu/CPU1/ais/rs2_exe_hazard (alu_in_selector)           0.00      10.75 f
+  cpu/CPU1/ais/U44/O (BUF1CK)                             0.38      11.13 f
+  cpu/CPU1/ais/U43/O (AN2B1S)                             0.18      11.31 r
+  cpu/CPU1/ais/U28/O (BUF1CK)                             0.21      11.52 r
+  cpu/CPU1/ais/U55/O (AO222)                              0.19      11.71 r
+  cpu/CPU1/ais/src2_data[1] (alu_in_selector)             0.00      11.71 r
+  cpu/CPU1/U140/O (BUF1CK)                                0.10      11.81 r
+  cpu/CPU1/ard/src2[1] (alu_rd)                           0.00      11.81 r
+  cpu/CPU1/ard/U530/O (INV1S)                             0.17      11.99 f
+  cpu/CPU1/ard/U529/O (BUF1CK)                            0.15      12.13 f
+  cpu/CPU1/ard/U159/O (INV2)                              0.41      12.55 r
+  cpu/CPU1/ard/sub_38/B[1] (alu_rd_DW01_sub_0)            0.00      12.55 r
+  cpu/CPU1/ard/sub_38/U4/O (INV1S)                        0.10      12.65 f
+  cpu/CPU1/ard/sub_38/U2_1/CO (FA1S)                      0.25      12.90 f
+  cpu/CPU1/ard/sub_38/U2_2/CO (FA1S)                      0.21      13.11 f
+  cpu/CPU1/ard/sub_38/U2_3/CO (FA1S)                      0.21      13.33 f
+  cpu/CPU1/ard/sub_38/U2_4/CO (FA1S)                      0.21      13.54 f
+  cpu/CPU1/ard/sub_38/U2_5/CO (FA1S)                      0.21      13.75 f
+  cpu/CPU1/ard/sub_38/U2_6/CO (FA1S)                      0.21      13.97 f
+  cpu/CPU1/ard/sub_38/U2_7/CO (FA1S)                      0.21      14.18 f
+  cpu/CPU1/ard/sub_38/U2_8/CO (FA1S)                      0.21      14.39 f
+  cpu/CPU1/ard/sub_38/U2_9/CO (FA1S)                      0.21      14.61 f
+  cpu/CPU1/ard/sub_38/U2_10/CO (FA1S)                     0.21      14.82 f
+  cpu/CPU1/ard/sub_38/U2_11/CO (FA1S)                     0.21      15.03 f
+  cpu/CPU1/ard/sub_38/U2_12/CO (FA1S)                     0.21      15.24 f
+  cpu/CPU1/ard/sub_38/U2_13/CO (FA1S)                     0.21      15.45 f
+  cpu/CPU1/ard/sub_38/U2_14/CO (FA1S)                     0.21      15.67 f
+  cpu/CPU1/ard/sub_38/U2_15/CO (FA1S)                     0.21      15.88 f
+  cpu/CPU1/ard/sub_38/U2_16/CO (FA1S)                     0.21      16.09 f
+  cpu/CPU1/ard/sub_38/U2_17/CO (FA1S)                     0.21      16.30 f
+  cpu/CPU1/ard/sub_38/U2_18/CO (FA1S)                     0.21      16.51 f
+  cpu/CPU1/ard/sub_38/U2_19/CO (FA1S)                     0.21      16.72 f
+  cpu/CPU1/ard/sub_38/U2_20/CO (FA1S)                     0.21      16.94 f
+  cpu/CPU1/ard/sub_38/U2_21/CO (FA1S)                     0.21      17.15 f
+  cpu/CPU1/ard/sub_38/U2_22/CO (FA1S)                     0.21      17.36 f
+  cpu/CPU1/ard/sub_38/U2_23/CO (FA1S)                     0.21      17.58 f
+  cpu/CPU1/ard/sub_38/U2_24/CO (FA1S)                     0.21      17.79 f
+  cpu/CPU1/ard/sub_38/U2_25/CO (FA1S)                     0.21      18.00 f
+  cpu/CPU1/ard/sub_38/U2_26/CO (FA1S)                     0.21      18.22 f
+  cpu/CPU1/ard/sub_38/U2_27/CO (FA1S)                     0.21      18.43 f
+  cpu/CPU1/ard/sub_38/U2_28/CO (FA1S)                     0.21      18.65 f
+  cpu/CPU1/ard/sub_38/U2_29/CO (FA1S)                     0.21      18.86 f
+  cpu/CPU1/ard/sub_38/U2_30/CO (FA1S)                     0.20      19.06 f
+  cpu/CPU1/ard/sub_38/U2_31/O (XOR3)                      0.14      19.20 f
+  cpu/CPU1/ard/sub_38/DIFF[31] (alu_rd_DW01_sub_0)        0.00      19.20 f
+  cpu/CPU1/ard/U926/O (AO222)                             0.21      19.41 f
+  cpu/CPU1/ard/U1231/O (OR3)                              0.12      19.53 f
+  cpu/CPU1/ard/alu_rd_data[31] (alu_rd)                   0.00      19.53 f
+  cpu/CPU1/U123/O (AO22)                                  0.13      19.66 f
+  cpu/CPU1/stage3_register_out_reg[95]/D (QDFFRBN)        0.00      19.66 f
+  data arrival time                                                 19.66
+
+  clock clk (rise edge)                                  30.00      30.00
+  clock network delay (ideal)                             0.00      30.00
+  cpu/CPU1/stage3_register_out_reg[95]/CK (QDFFRBN)       0.00      30.00 r
+  library setup time                                     -0.11      29.89
+  data required time                                                29.89
+  --------------------------------------------------------------------------
+  data required time                                                29.89
+  data arrival time                                                -19.66
+  --------------------------------------------------------------------------
+  slack (MET)                                                       10.23
+
+
