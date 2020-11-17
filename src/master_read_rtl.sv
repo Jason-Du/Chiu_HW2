@@ -10,7 +10,6 @@ module master_read #(
 	cpu_read_signal,
 	im_read_pause,
 	address,
-	instruction_stall,
 	
 	read_data,
 	read_pause_cpu,
@@ -44,7 +43,6 @@ module master_read #(
 	input                             cpu_read_signal;
     input        [              31:0] address; 	
 	input                             im_read_pause;
-	input                             instruction_stall;
 
 	
 	
@@ -98,17 +96,17 @@ module master_read #(
 	begin
 		if(!rst)
 		begin
-			read_data_register_out<=32'd0;
-			ARADDR_M_register_out<=32'd0;
-			ARREADY_M_register_out<=1'b0;
-			RLAST_M_register_out<=1'b0;
+			read_data_register_out <=32'd0;
+			ARADDR_M_register_out  <=32'd0;
+			ARREADY_M_register_out <=1'b0;
+			RLAST_M_register_out   <=1'b0;
 		end
 		else
 		begin
-			read_data_register_out<=read_data;
-			ARADDR_M_register_out<=ARADDR_M;
-			ARREADY_M_register_out<=ARREADY_M;
-			RLAST_M_register_out<=RLAST_M;
+			read_data_register_out <=read_data;
+			ARADDR_M_register_out  <=ARADDR_M;
+			ARREADY_M_register_out <=ARREADY_M;
+			RLAST_M_register_out   <=RLAST_M;
 		end
 	end
 	always_comb
@@ -118,22 +116,22 @@ module master_read #(
 			begin
 				if(cpu_read_signal)
 				begin
-					ns=3'b001;
-					read_pause_cpu=1'b1;
-					ARADDR_M =address;
+					ns             =3'b001;
+					read_pause_cpu =1'b1;
+					ARADDR_M       =address;
 				end
 				else
 				begin
-					ns=3'b000;
-					read_pause_cpu=1'b0;
-					ARADDR_M =32'd0;
+					ns             =3'b000;
+					read_pause_cpu =1'b0;
+					ARADDR_M       =32'd0;
 				end
-				ARID_M   =default_slaveid;
+				ARID_M             =default_slaveid;
 				//mofify
 				//ARADDR_M =32'd0;
-				ARVALID_M=1'b0;
-				RREADY_M =1'b0;
-				read_data=32'd0;
+				ARVALID_M          =1'b0;
+				RREADY_M           =1'b0;
+				read_data          =32'd0;
 			end
 			3'b001:
 			begin
@@ -146,24 +144,24 @@ module master_read #(
 					ns=3'b001;
 					
 				end
-				ARVALID_M=1'b1;
-				ARID_M   =slaveid;
-				ARADDR_M =ARADDR_M_register_out;
-				RREADY_M =1'b0;
-				read_pause_cpu=1'b1;
-				read_data=32'd0;
+				ARVALID_M      =1'b1;
+				ARID_M         =slaveid;
+				ARADDR_M       =ARADDR_M_register_out;
+				RREADY_M       =1'b0;
+				read_pause_cpu =1'b1;
+				read_data      =32'd0;
 			end
 			
 			3'b010:
 			begin
-				ns=RVALID_M?3'b100:3'b010;
-				RREADY_M =1'b1;
-				ARID_M   =slaveid;
-				ARADDR_M =ARADDR_M_register_out;
-				ARVALID_M=1'b1;
-				RREADY_M =1'b1;
-				read_pause_cpu=1'b1;
-				read_data= (RRESP_M==2'b00 && RVALID_M==1'b1)?RDATA_M:32'd0;
+				ns             =RVALID_M?3'b100:3'b010;
+				RREADY_M       =1'b1;
+				ARID_M         =slaveid;
+				ARADDR_M       =ARADDR_M_register_out;
+				ARVALID_M      =1'b1;
+				RREADY_M       =1'b1;
+				read_pause_cpu =1'b1;
+				read_data      =(RRESP_M==2'b00 && RVALID_M==1'b1)?RDATA_M:32'd0;
 			end
 			/*
 			3'b011:
@@ -187,33 +185,33 @@ module master_read #(
 			//modify state
 			3'b100:
 			begin
-				ARID_M   =slaveid;
-				ARADDR_M =ARADDR_M_register_out;
-				ARVALID_M=1'b0;
-				RREADY_M =1'b0;
-				read_data=read_data_register_out;
-				read_pause_cpu=1'b0;
-				ns=	(im_read_pause==1'b1)?3'b100:3'b000;				
+				ARID_M         =slaveid;
+				ARADDR_M       =ARADDR_M_register_out;
+				ARVALID_M      =1'b0;
+				RREADY_M       =1'b0;
+				read_data      =read_data_register_out;
+				read_pause_cpu =1'b0;
+				ns             =(im_read_pause==1'b1)?3'b100:3'b000;				
 			end
 			
 			default:
 			begin
-				ARID_M   =default_slaveid;
-				ARADDR_M =32'd0;
-				ARVALID_M=1'b0;
-				RREADY_M =1'b0;
-				read_pause_cpu=1'b0;
-				read_data=32'd0;
-				ns=3'b000;
+				ARID_M         =default_slaveid;
+				ARADDR_M       =32'd0;
+				ARVALID_M      =1'b0;
+				RREADY_M       =1'b0;
+				read_pause_cpu =1'b0;
+				read_data      =32'd0;
+				ns             =3'b000;
 			end
 		endcase
 	end
 	
 	always_comb
 	begin
-		ARLEN_M  =4'd0;
-		ARSIZE_M =3'd2;
-		ARBURST_M=2'd1;
+		ARLEN_M               =4'd0;
+		ARSIZE_M              =3'd2;
+		ARBURST_M             =2'd1;
 	end
 	
 endmodule

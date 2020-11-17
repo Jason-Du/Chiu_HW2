@@ -130,21 +130,21 @@ module master_write#(
 	begin
 		if(!rst)
 		begin
-			WSTRB_M_register_out<=4'b1111;
-			AWADDR_M_register_out<=32'b0;
-			WDATA_M_register_out<=32'd0;
-			AWID_M_register_out<=4'b0000;
-			AWREADY_M_register_out<=1'b0;
-			WREADY_M_register_out<=1'b0;
+			WSTRB_M_register_out   <=4'b1111;
+			AWADDR_M_register_out  <=32'b0;
+			WDATA_M_register_out   <=32'd0;
+			AWID_M_register_out    <=4'b0000;
+			AWREADY_M_register_out <=1'b0;
+			WREADY_M_register_out  <=1'b0;
 		end
 		else
 		begin
-			WSTRB_M_register_out<=WSTRB_M;
-			AWADDR_M_register_out<=AWADDR_M;
-			WDATA_M_register_out<=WDATA_M;
-			AWID_M_register_out<=AWID_M;
-			AWREADY_M_register_out<=AWREADY_M;
-			WREADY_M_register_out<=WREADY_M;
+			WSTRB_M_register_out   <=WSTRB_M;
+			AWADDR_M_register_out  <=AWADDR_M;
+			WDATA_M_register_out   <=WDATA_M;
+			AWID_M_register_out    <=AWID_M;
+			AWREADY_M_register_out <=AWREADY_M;
+			WREADY_M_register_out  <=WREADY_M;
 		end
 	end
 	always_comb
@@ -154,24 +154,24 @@ module master_write#(
 			begin
 				if(cpu_write_signal==1'b1)
 				begin
-					ns=3'b001;
-					cpu_write_pause=1'b1;
-					WDATA_M=cpu_write_data;
+					ns              =3'b001;
+					cpu_write_pause =1'b1;
+					WDATA_M         =cpu_write_data;
 				end
 				else
 				begin
-					ns=3'b000;
-					cpu_write_pause=1'b0;
-					WDATA_M=32'd0;
+					ns              =3'b000;
+					cpu_write_pause =1'b0;
+					WDATA_M         =32'd0;
 				end
 				//WDATA_M=cpu_write_data;
-				AWID_M=default_slaveid;
-				AWADDR_M=32'd0;
-				AWVALID_M=1'b0;
-				WSTRB_M=cpu_write_signal?web:4'b1111;
-				WLAST_M=1'b0;
-				WVALID_M=1'b0;
-				BREADY_M=1'b0;
+				AWID_M              =default_slaveid;
+				AWADDR_M            =32'd0;
+				AWVALID_M           =1'b0;
+				WSTRB_M             =cpu_write_signal?web:4'b1111;
+				WLAST_M             =1'b0;
+				WVALID_M            =1'b0;
+				BREADY_M            =1'b0;
 			end
 			3'b001:
 			begin
@@ -184,45 +184,45 @@ module master_write#(
 					ns=3'b001;
 
 				end
-				AWID_M=slaveid;
-				AWADDR_M=address;
-				AWVALID_M=1'b1;
+				AWID_M         =slaveid;
+				AWADDR_M       =address;
+				AWVALID_M      =1'b1;
 				//AWVALID_M=1'b1;
 					//WRITE DATA1
-				WDATA_M=WDATA_M_register_out;
+				WDATA_M        =WDATA_M_register_out;
 				//WSTRB_M=WSTRB_M;//modify
-				WSTRB_M=WSTRB_M_register_out;
-				WLAST_M=1'b0;
-				WVALID_M=1'b0;
+				WSTRB_M        =WSTRB_M_register_out;
+				WLAST_M        =1'b0;
+				WVALID_M       =1'b0;
 					//WRITE RESPONSE1
 				//BREADY_M=BVALID_M?1'b1:1'b0;
-				BREADY_M=1'b0;
+				BREADY_M       =1'b0;
 				cpu_write_pause=1'b1;	
 			end
 			3'b010:
 			begin
 				if(WREADY_M_register_out==1'b1)
 				begin
-					ns=3'b011;
-					WVALID_M=1'b1;
+					ns         =3'b011;
+					WVALID_M   =1'b1;
 				end
 				else
 				begin
-					ns=3'b010;
-					WVALID_M=1'b0;
+					ns         =3'b010;
+					WVALID_M   =1'b0;
 				end
 				
-				AWID_M=AWID_M_register_out;
-				AWADDR_M=AWADDR_M_register_out;
+				AWID_M         =AWID_M_register_out;
+				AWADDR_M       =AWADDR_M_register_out;
 				
-				AWVALID_M=1'b1;
+				AWVALID_M      =1'b1;
 					//WRITE DATA1//modify
-				WDATA_M=WDATA_M_register_out;
+				WDATA_M        =WDATA_M_register_out;
 				//WDATA_M=WREADY_M?WSTRB_M_register_out:32'd0;
-				WSTRB_M=WSTRB_M_register_out;
-				WLAST_M=1'b1;
+				WSTRB_M        =WSTRB_M_register_out;
+				WLAST_M        =1'b1;
 					//WRITE RESPONSE1
-				BREADY_M=1'b1;
+				BREADY_M       =1'b1;
 				//BREADY_M=BVALID_M?1'b1:1'b0;
 				cpu_write_pause=1'b1;					
 			end				
@@ -238,50 +238,50 @@ module master_write#(
 				begin
 					ns=3'b011;
 				end
-				BREADY_M=1'b1;
-				AWID_M=AWID_M_register_out;
-				AWADDR_M=AWADDR_M_register_out;
+				BREADY_M       =1'b1;
+				AWID_M         =AWID_M_register_out;
+				AWADDR_M       =AWADDR_M_register_out;
 				
-				AWVALID_M=1'b0;
+				AWVALID_M      =1'b0;
 					//WRITE DATA1
-				WDATA_M=WDATA_M_register_out;
-				WSTRB_M=WSTRB_M_register_out;
-				WLAST_M=1'b0;
-				WVALID_M=1'b0;
+				WDATA_M        =WDATA_M_register_out;
+				WSTRB_M        =WSTRB_M_register_out;
+				WLAST_M        =1'b0;
+				WVALID_M       =1'b0;
 					//WRITE RESPONSE1
 				
 				cpu_write_pause=1'b1;	
 			end
 			3'b100:
 			begin
-				ns=im_read_pause?3'b100:3'b000;
-				AWID_M=AWID_M_register_out;
-				AWADDR_M=AWADDR_M_register_out;
+				ns              =im_read_pause?3'b100:3'b000;
+				AWID_M          =AWID_M_register_out;
+				AWADDR_M        =AWADDR_M_register_out;
 				
-				AWVALID_M=1'b0;
+				AWVALID_M       =1'b0;
 					//WRITE DATA1
-				WDATA_M=WDATA_M_register_out;
-				WSTRB_M=WSTRB_M_register_out;
-				WLAST_M=1'b0;
-				WVALID_M=1'b0;
+				WDATA_M         =WDATA_M_register_out;
+				WSTRB_M         =WSTRB_M_register_out;
+				WLAST_M         =1'b0;
+				WVALID_M        =1'b0;
 					//WRITE RESPONSE1
-				BREADY_M=1'b0;
-				cpu_write_pause=(im_read_pause==1'b1)?1'b1:1'b0;					
+				BREADY_M        =1'b0;
+				cpu_write_pause =(im_read_pause==1'b1)?1'b1:1'b0;					
 			end
 			default:
 			begin
-				ns=3'b000;
-				AWID_M=4'b0000;
-				AWADDR_M=32'd0;
+				ns             =3'b000;
+				AWID_M         =4'b0000;
+				AWADDR_M       =32'd0;
 				
-				AWVALID_M=1'b0;
+				AWVALID_M      =1'b0;
 					//WRITE DATA1
-				WDATA_M=32'd0;
-				WSTRB_M=4'b0000;
-				WLAST_M=1'b0;
-				WVALID_M=1'b0;
+				WDATA_M        =32'd0;
+				WSTRB_M        =4'b0000;
+				WLAST_M        =1'b0;
+				WVALID_M       =1'b0;
 					//WRITE RESPONSE1
-				BREADY_M=1'b0;
+				BREADY_M       =1'b0;
 				cpu_write_pause=1'b0;		
 			end
 		endcase

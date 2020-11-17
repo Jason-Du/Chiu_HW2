@@ -185,7 +185,6 @@ module CPU_wrapper(
 	.im_read_pause(im_read_pause),
 	.read_data(dm_read_data),
 	.read_pause_cpu(dm_read_pause),
-	.instruction_stall(1'b0),
 
 	
 	
@@ -219,7 +218,6 @@ module CPU_wrapper(
 	.im_read_pause(1'b0),
 	.read_data(im_read_data),
 	.read_pause_cpu(im_read_pause),
-	.instruction_stall(instruction_stall),
 	
 	
 	//READ ADDRESS0

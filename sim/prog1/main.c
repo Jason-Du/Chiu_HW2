@@ -1,4 +1,3 @@
-
 int main()
 {
 	
@@ -10,7 +9,7 @@ int main()
 	int i=0;
 	int j=0;
 	signed int temp =0;
-	for (i=0; i <number ;++i)
+	for (i=0; i <number; ++i)
 	{
 		for (j=0; j <number; ++j)
 		{
@@ -20,7 +19,6 @@ int main()
 				*(&(array_addr)+j)=*(&(array_addr)+i);
 				*(&(array_addr)+i)=temp;
 			}
-			
 		}
 	}
 	for (i=0; i <number; ++i)
@@ -30,5 +28,5 @@ int main()
 		
 	}
 	return 0;
-}
 
+}
