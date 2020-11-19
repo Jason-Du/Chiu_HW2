@@ -134,6 +134,7 @@ logic                 instruction_stall;
 //logic        [         13:0] im_addr0;
 logic        [         31:0] im_dataout_data;
 logic                        write_reg_bus;
+logic                        bus_stall_register_out;
 
 //DEBUG
 
@@ -159,15 +160,17 @@ begin:pc_id
 	if (rst)
 	begin
 		pc_register_out<=32'd0;
+		bus_stall_register_out<=1'b0;
 	end
 	else
 	begin
 		pc_register_out<=pc_data;
+		bus_stall_register_out<=bus_stall;
 	end
 end
 always_comb
 begin:if_comb
-	im_read_mem=(instruction_stall)?1'b0:1'b1;
+	im_read_mem=bus_stall_register_out?1'b0:((instruction_stall)?1'b0:1'b1);
 	next_pc=pc_register_out+32'd4;
 	//unsigned'(mem_addr)>>2
 	//im_addr=unsigned'(pc_register_out)>>2;
@@ -427,7 +430,7 @@ always_comb
 begin:mem_comb
 	//dm_oe=stage3_register_out[138];
 	//dm_cs=1'b1;
-	dm_read_mem=stage3_register_out[138];
+	dm_read_mem=bus_stall_register_out?1'b0:stage3_register_out[138];
 	dm_write_mem=stage3_register_out[139];
 	//dm_addr={16'h0001,2'b00,quotient[13:0]};
 	dm_addr=stage3_register_out[127:96];

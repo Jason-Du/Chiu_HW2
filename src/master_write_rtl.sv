@@ -236,7 +236,7 @@ module master_write#(
 				end
 				else
 				begin
-					ns=3'b011;
+					ns=3'b000;
 				end
 				BREADY_M       =1'b1;
 				AWID_M         =AWID_M_register_out;
@@ -249,24 +249,7 @@ module master_write#(
 				WLAST_M        =1'b0;
 				WVALID_M       =1'b0;
 					//WRITE RESPONSE1
-				
 				cpu_write_pause=1'b1;	
-			end
-			3'b100:
-			begin
-				ns              =im_read_pause?3'b100:3'b000;
-				AWID_M          =AWID_M_register_out;
-				AWADDR_M        =AWADDR_M_register_out;
-				
-				AWVALID_M       =1'b0;
-					//WRITE DATA1
-				WDATA_M         =WDATA_M_register_out;
-				WSTRB_M         =WSTRB_M_register_out;
-				WLAST_M         =1'b0;
-				WVALID_M        =1'b0;
-					//WRITE RESPONSE1
-				BREADY_M        =1'b0;
-				cpu_write_pause =(im_read_pause==1'b1)?1'b1:1'b0;					
 			end
 			default:
 			begin

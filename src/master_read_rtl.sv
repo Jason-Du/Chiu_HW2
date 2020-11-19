@@ -131,8 +131,9 @@ module master_read #(
 				//ARADDR_M =32'd0;
 				ARVALID_M          =1'b0;
 				RREADY_M           =1'b0;
-				read_data          =32'd0;
+				read_data          =read_data_register_out;
 			end
+
 			3'b001:
 			begin
 				if(ARREADY_M_register_out==1'b1)
@@ -154,7 +155,7 @@ module master_read #(
 			
 			3'b010:
 			begin
-				ns             =RVALID_M?3'b100:3'b010;
+				ns             =RVALID_M?3'b000:3'b010;
 				RREADY_M       =1'b1;
 				ARID_M         =slaveid;
 				ARADDR_M       =ARADDR_M_register_out;
@@ -163,37 +164,6 @@ module master_read #(
 				read_pause_cpu =1'b1;
 				read_data      =(RRESP_M==2'b00 && RVALID_M==1'b1)?RDATA_M:32'd0;
 			end
-			/*
-			3'b011:
-			begin
-				if (RLAST_M==1'b1)
-				begin
-					ns=3'b100;
-				end
-				else
-				begin
-					ns=3'b011;
-				end
-				ARID_M   =slaveid;
-				ARADDR_M =ARADDR_M_register_out;
-				ARVALID_M=1'b0;
-				RREADY_M =1'b1;
-				read_data= (RRESP_M==2'b00 && RVALID_M==1'b1)?RDATA_M:32'd0;
-				read_pause_cpu=1'b1;
-			end
-			*/
-			//modify state
-			3'b100:
-			begin
-				ARID_M         =slaveid;
-				ARADDR_M       =ARADDR_M_register_out;
-				ARVALID_M      =1'b0;
-				RREADY_M       =1'b0;
-				read_data      =read_data_register_out;
-				read_pause_cpu =1'b0;
-				ns             =(im_read_pause==1'b1)?3'b100:3'b000;				
-			end
-			
 			default:
 			begin
 				ARID_M         =default_slaveid;

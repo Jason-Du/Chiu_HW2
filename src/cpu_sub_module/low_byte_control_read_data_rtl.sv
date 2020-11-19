@@ -23,6 +23,8 @@
 	end
 	else
 	begin
+		read_mem_data=32'(signed'(memout[7:0]));
+	/*
 		case(reminder)
 			32'd0:
 			begin
@@ -45,6 +47,7 @@
 				read_mem_data=32'd0;
 			end
 		endcase
+		*/
 	end
  end
  
