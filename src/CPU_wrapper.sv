@@ -182,7 +182,6 @@ module CPU_wrapper(
 	.rst(rst),
 	.cpu_read_signal(dm_read_signal),
 	.address(dm_address),
-	.im_read_pause(im_read_pause),
 	.read_data(dm_read_data),
 	.read_pause_cpu(dm_read_pause),
 
@@ -215,7 +214,6 @@ module CPU_wrapper(
 	.rst(rst),
 	.cpu_read_signal(im_read_signal),
 	.address(im_address),
-	.im_read_pause(1'b0),
 	.read_data(im_read_data),
 	.read_pause_cpu(im_read_pause),
 	
@@ -247,7 +245,6 @@ module CPU_wrapper(
 	.rst(rst),
 	.cpu_write_signal(dm_write_signal),
 	.cpu_write_data(dm_write_data),
-	.im_read_pause(im_read_pause),
 	.address(dm_address),
 	.web(dm_web),
 	

@@ -431,7 +431,7 @@ begin:mem_comb
 	//dm_oe=stage3_register_out[138];
 	//dm_cs=1'b1;
 	dm_read_mem=bus_stall_register_out?1'b0:stage3_register_out[138];
-	dm_write_mem=stage3_register_out[139];
+	dm_write_mem=bus_stall_register_out?1'b0:stage3_register_out[139];
 	//dm_addr={16'h0001,2'b00,quotient[13:0]};
 	dm_addr=stage3_register_out[127:96];
 	dm_web=(stage3_register_out[139])?web_data:4'b1111;
