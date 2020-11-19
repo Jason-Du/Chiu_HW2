@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 `define CYCLE 10.0 // Cycle time
-`define MAX 3000000 // Max cycle number
+`define MAX 300000 // Max cycle number
 `ifdef SYN
 `include "top_syn.v"
 `include "SRAM/SRAM.v"

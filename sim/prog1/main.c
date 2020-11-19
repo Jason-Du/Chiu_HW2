@@ -1,32 +1,24 @@
-int main()
-{
-	
-	extern signed int array_size;
-	extern signed int array_addr;
+int main (void) {
+	extern int array_size;
+	extern int array_addr;
+	extern int _test_start;
 
-	extern signed int _test_start;
-	int number=*(&(array_size));
-	int i=0;
-	int j=0;
-	signed int temp =0;
-	for (i=0; i <number; ++i)
-	{
-		for (j=0; j <number; ++j)
-		{
-			if (  (*(&(array_addr)+j) )  >  ( *(&(array_addr)+i) )  ) 
-			{
-				temp=*(&(array_addr)+j);
-				*(&(array_addr)+j)=*(&(array_addr)+i);
-				*(&(array_addr)+i)=temp;
+	*(&_test_start) = *(&array_addr);
+
+	for (int array_comp = 1; array_comp < array_size; array_comp++) {
+		int insert = 0;
+		for (int test_comp = 0; test_comp < array_comp; test_comp++) {
+			if (*(&array_addr + array_comp) < *(&_test_start + test_comp)) {
+				for (int i = array_comp; i > test_comp; i--) {
+					*(&_test_start + i) = *(&_test_start + i - 1);
+				}
+				*(&_test_start + test_comp) = *(&array_addr + array_comp);
+				insert = 1;
+				break;
 			}
 		}
+		if (insert == 0) *(&_test_start + array_comp) = *(&array_addr + array_comp);
 	}
-	for (i=0; i <number; ++i)
-	{
-	
-		*(&(_test_start)+i)= *(&(array_addr)+i);	
-		
-	}
+ 
 	return 0;
-
 }

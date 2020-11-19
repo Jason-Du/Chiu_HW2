@@ -155,7 +155,7 @@ module master_read #(
 			end
 			STATE_GET_DATA:
 			begin
-				ns             =RVALID_M?3'b000:3'b010;
+				ns             =RVALID_M?STATE_IDLE:STATE_GET_DATA;
 				RREADY_M       =1'b1;
 				ARID_M         =slaveid;
 				ARADDR_M       =ARADDR_M_register_out;
